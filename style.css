@@ -15,6 +15,10 @@
   text-decoration: line-through;
 }
 
+.dragging :is(th,td) {
+  background-color: lightsalmon !important;
+}
+
 body {
   margin:0;
   font-family: var(--basic-font);
@@ -512,7 +516,8 @@ main table {
   }
 
   tbody {
-    > :nth-of-type(even) > * { background-color: #eee; }
+    /* tr:nth-of-type(even) { background-color: #eee; } */
+    tr:nth-of-type(even) :is(th,td) { background-color: #eee; }
     th,td { border-block-end: 1px solid darkgray; }
     th    { border-inline-end: 3px dotted rgba(0,0,0,0.15); }
     

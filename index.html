@@ -36,8 +36,6 @@
         </button>
 
         <button class="aside-button" @click="toTest">to test</button>
-        <button class="aside-button" @click="skillList.pop()">pop</button>
-        <button class="aside-button" @click="skillList[0].value=1000">change value</button>
       </aside>
 
       <!-- 入力欄 -->
@@ -116,7 +114,16 @@
                   <th>{{key}}</th>
                   <td>{{dic.value}}</td>
                 </tr>
-                <tr v-for="param in exStats.params" :key="param.id">
+                <tr 
+                  v-for="(param, index) in exStats.params" 
+                  :key="param.id"
+                  :draggable="true"
+                  :class="index === dragIndex && dragTarget===exStats.params ? 'dragging' : null"
+                  @dragstart="dragStart(index, exStats.params)"
+                  @dragenter="dragEnter(index, exStats.params)"
+                  @dragover.prevent
+                  @dragend="dragEnd"
+                >
                   <td></td>
                   <th><input type="text" v-model="param.title"/></th>
                   <td><input type="text" v-model="param.value"/></td>
@@ -140,7 +147,16 @@
                   <th>{{key}}</th>
                   <td>{{dic.value}}</td>
                 </tr>
-                <tr v-for="stat in exStats.stats" :key="stat.id">
+                <tr
+                  v-for="(stat,index) in exStats.stats" 
+                  :key="stat.id"
+                  :draggable="true"
+                  :class="index === dragIndex && dragTarget===exStats.stats ? 'dragging' : null"
+                  @dragstart="dragStart(index, exStats.stats)"
+                  @dragenter="dragEnter(index, exStats.stats)"
+                  @dragover.prevent
+                  @dragend="dragEnd"
+                >
                   <td></td>
                   <th><input type="text" v-model="stat.title"/></th>
                   <td><input type="text" v-model="stat.value"/></td>
@@ -161,7 +177,16 @@
             <table id="skillTable">
               <caption>技能</caption>
               <tbody>
-                <tr v-for="dic in skillList" :key="dic.id">
+                <tr 
+                  v-for="(dic,index) in skillList" 
+                  :key="dic.id"
+                  :draggable="true"
+                  :class="index === dragIndex && dragTarget===skillList ? 'dragging' : null"
+                  @dragstart="dragStart(index, skillList)"
+                  @dragenter="dragEnter(index, skillList)"
+                  @dragover.prevent
+                  @dragend="dragEnd"
+                >
                   <th :class="{disable : dic.noname}" @click="dic.noname = !dic.noname">
                     {{dic.times ? `x${dic.times} ` : ''}}{{dic.name}}
                   </th>
@@ -184,7 +209,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="dic in refChatList">
+              <tr 
+                v-for="(dic,index) in refChatList"
+                :draggable="true"
+                :class="index === dragIndex && dragTarget===refChatList ? 'dragging' : null"
+                @dragstart="dragStart(index, refChatList)"
+                @dragenter="dragEnter(index, refChatList)"
+                @dragover.prevent
+                @dragend="dragEnd"
+              >
                 <td><input type="checkbox" v-model="dic.del"></td>
                 <td><input type="checkbox" v-model="dic.secret"></td>
                 <td :class="{disable: dic.del}" @click="dic.del=!dic.del">

@@ -113,13 +113,12 @@ const rootApp = createApp({
 
           // 技能・判定
           } else if (chatTarget == '技能') {
-            // skillList.value.map(dic => dic.noname); // dic.noname へのリンクを張るために必要
             rawDicArr.push(...skillList.value);
 
 
           // 倍数ロール
           } else if (chatTarget == 'ステ*5') {
-            if (defStats.value.params.values().find(dic => dic.value && !dic.del))
+            if (defStats.value.params.entries().find(row => row[1].value && !row[1].del && row[0]!='DB'))
               rawDicArr.push({ id: id++, type: 'line', value: '===========' });
             
             defStats.value.params.forEach((dic, key) => {
@@ -365,6 +364,31 @@ const rootApp = createApp({
     }
 
 
+    // -----------------
+    //    to switch
+    // -----------------
+    const dragIndex = ref(null);
+    const dragTarget = ref(null)
+    const dragStart = (index, target) => { 
+      dragIndex.value = index; 
+      dragTarget.value = target;
+    };
+    const dragEnter = (index, target) => {
+      if (target !== dragTarget.value) return;
+      if (index === dragIndex) return;
+      const deleteElement = dragTarget.value.splice(dragIndex.value, 1)[0];
+      dragTarget.value.splice(index, 0, deleteElement);
+      dragIndex.value = index;
+    };
+    const dragEnd = () => { 
+      dragIndex.value = null; 
+      dragTarget.value = null;
+    };
+
+
+    // -----------------
+    //     to test
+    // -----------------
     function toTest () {
       document.getElementById('stats').value = 
 `STR 8 ... EDU 15
@@ -416,6 +440,12 @@ HP 12  MP 30  SAN 10  DB +1D4
 
       updateDefStats,
       updateSkillList,
+
+      dragIndex,
+      dragTarget,
+      dragStart,
+      dragEnter,
+      dragEnd,
 
       toTest,
     }
