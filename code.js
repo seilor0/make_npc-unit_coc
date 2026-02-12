@@ -52,19 +52,9 @@ const chatTable   = document.querySelector('#chatTable tbody');
 const dragEvent = new Map([
   ['dragstart',dragStart2], 
   ['dragenter',switchRow], 
-  // ['dragleave',dragLeave],
   ['dragover', dragOver],
   ['dragend', dragEnd2]
-  // ['drop',drop],
 ]);
-// const dragEvent = new Map([
-//   ['dragenter',dragEnter], 
-//   ['dragleave',dragLeave],
-//   ['dragover', dragOver],
-//   ['dragstart',dragStart], 
-//   ['drop',drop],
-// ]);
-
 
 
 // -------------------------
@@ -657,12 +647,7 @@ function createChatList() {
     new Map([
       ['dragstart',dragStart2], ['dragenter',switchRowDic], ['dragover',dragOver], ['dragend',dragEnd2]
     ])
-      .forEach((value,key) => row.addEventListener(key,value))
-    // new Map([['dragstart',dragStart], ['drop',[drop,dropAdd]]])
-    //   .forEach((value,key) => {
-    //     if (typeof(value)=='function') row.addEventListener(key,value);
-    //     else value.forEach(val=>row.addEventListener(key,val));
-    //   });
+      .forEach((value,key) => row.addEventListener(key,value));
     
     const cell1 = row.children[0];
     const cell2 = row.children[1];
@@ -896,30 +881,7 @@ function switchRowDic (e) {
   dragIndex = index;
 }
 
-
 function dragOver  (e) {e.preventDefault()};
-
-// function dragEnter (e) {e.currentTarget.classList.add('target')}
-// function dragLeave (e) {e.currentTarget.classList.remove('target')}
-
-// function dragStart (e) {
-//   e.dataTransfer.setData('text/plain', e.currentTarget.sectionRowIndex);
-// }
-
-// function drop (e) {
-//   e.currentTarget.classList.remove('target');
-//   const startIndex = parseInt(e.dataTransfer.getData('text/plain'));
-//   e.currentTarget.before(e.currentTarget.parentElement.children[startIndex]);
-// }
-
-// function dropAdd (e) {
-//   const startIndex = parseInt(e.dataTransfer.getData('text/plain'));
-//   const startDic = chatList[startIndex];
-//   const dropIndex  = e.currentTarget.rowIndex-2;
-//   chatList.splice(startIndex,1);
-//   chatList.splice(dropIndex, 0, startDic);
-// }
-
 
 
 
