@@ -50,20 +50,12 @@ const chatTable   = document.querySelector('#chatTable tbody');
 
 // event for D&D
 const dragEvent = new Map([
-  ['dragstart',dragStart2], 
-  ['dragenter',switchRow], 
-  // ['dragleave',dragLeave],
+  ['dragenter',dragEnter], 
+  ['dragleave',dragLeave],
   ['dragover', dragOver],
-  ['dragend', dragEnd2]
-  // ['drop',drop],
+  ['dragstart',dragStart], 
+  ['drop',drop],
 ]);
-// const dragEvent = new Map([
-//   ['dragenter',dragEnter], 
-//   ['dragleave',dragLeave],
-//   ['dragover', dragOver],
-//   ['dragstart',dragStart], 
-//   ['drop',drop],
-// ]);
 
 
 
@@ -655,14 +647,17 @@ function createChatList() {
     const row = addRow(chatTable, 3, -1);
     row.draggable = true;
     new Map([
-      ['dragstart',dragStart2], ['dragenter',switchRowDic], ['dragover',dragOver], ['dragend',dragEnd2]
+      ['dragstart',dragStart], 
+      ['dragenter', dragEnter],
+      ['dragleave', dragLeave],
+      ['dragover', dragOver],
+      ['drop',[drop,dropAdd]]
     ])
-      .forEach((value,key) => row.addEventListener(key,value))
-    // new Map([['dragstart',dragStart], ['drop',[drop,dropAdd]]])
-    //   .forEach((value,key) => {
-    //     if (typeof(value)=='function') row.addEventListener(key,value);
-    //     else value.forEach(val=>row.addEventListener(key,val));
-    //   });
+      .forEach((value,key) => {
+        console.log(value);
+        if (typeof(value)=='function') row.addEventListener(key,value);
+        else value.forEach(val=>row.addEventListener(key,val));
+      });
     
     const cell1 = row.children[0];
     const cell2 = row.children[1];
@@ -853,72 +848,28 @@ function toggleSecretCheckbox (e)  {
   input.checked = !input.checked;
 }
 
-let dragIndex = null;
-function dragStart2 (e) {
-  dragIndex = e.currentTarget.sectionRowIndex;
-  e.currentTarget.classList.add('dragging');
-}
-function dragEnd2 (e) {
-  dragIndex = null;
-  e.currentTarget.classList.remove('dragging');
-}
-
-function switchRow (e) {
-  if (e.currentTarget.sectionRowIndex===dragIndex) return;
-  const index = e.currentTarget.sectionRowIndex;
-  const parent = e.currentTarget.parentElement;
-  const deleteElement = parent.children[dragIndex];
-
-  deleteElement.remove();
-
-  const target = parent.children[index];
-  if (target) target.before(deleteElement);
-  else parent.appendChild(deleteElement);
-
-  dragIndex = index;
-}
-
-function switchRowDic (e) {
-  if (e.currentTarget.sectionRowIndex===dragIndex) return;
-  const index = e.currentTarget.sectionRowIndex;
-  const parent = e.currentTarget.parentElement;
-  
-  const deleteElement = parent.children[dragIndex];
-  deleteElement.remove();
-  const deleteDic = chatList.splice(dragIndex, 1);
-
-  const target = parent.children[index];
-  if (target) target.before(deleteElement);
-  else parent.appendChild(deleteElement);
-
-  chatList.splice(index, 0, ...deleteDic);
-
-  dragIndex = index;
-}
-
-
 function dragOver  (e) {e.preventDefault()};
 
-// function dragEnter (e) {e.currentTarget.classList.add('target')}
-// function dragLeave (e) {e.currentTarget.classList.remove('target')}
+function dragEnter (e) {e.currentTarget.classList.add('target')}
+function dragLeave (e) {e.currentTarget.classList.remove('target')}
 
-// function dragStart (e) {
-//   e.dataTransfer.setData('text/plain', e.currentTarget.sectionRowIndex);
-// }
+function dragStart (e) {
+  e.dataTransfer.setData('text/plain', e.currentTarget.sectionRowIndex);
+}
 
-// function drop (e) {
-//   e.currentTarget.classList.remove('target');
-//   const startIndex = parseInt(e.dataTransfer.getData('text/plain'));
-//   e.currentTarget.before(e.currentTarget.parentElement.children[startIndex]);
-// }
+function drop (e) {
+  e.currentTarget.classList.remove('target');
+  const startIndex = parseInt(e.dataTransfer.getData('text/plain'));
+  e.currentTarget.before(e.currentTarget.parentElement.children[startIndex]);
+}
 
-// function dropAdd (e) {
-//   const startIndex = parseInt(e.dataTransfer.getData('text/plain'));
-//   const startDic = chatList[startIndex];
-//   const dropIndex  = e.currentTarget.rowIndex-2;
-//   chatList.splice(startIndex,1);
-//   chatList.splice(dropIndex, 0, startDic);
-// }
+function dropAdd (e) {
+  const startIndex = parseInt(e.dataTransfer.getData('text/plain'));
+  const startDic = chatList[startIndex];
+  const dropIndex  = e.currentTarget.rowIndex-2;
+  chatList.splice(startIndex,1);
+  chatList.splice(dropIndex, 0, startDic);
+}
 
 
 
