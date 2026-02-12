@@ -4,8 +4,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NPCコマ作成</title>
+  <title>NPCコマ作成_vue</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
 <body>
@@ -62,7 +63,7 @@
             </div>
           </div>
         </div>
-        <textarea id="stats"></textarea>
+        <textarea id="stats" @change="updateDefStats"></textarea>
 
         <!-- 技能・ダイス・choice -->
         <div class="title">
@@ -78,12 +79,11 @@
               <p style="margin-block: 0.5rem;">
                 <span class="title">消す文字（正規表現）：</span>
               </p>
-              <input type="text" id="delChar" value=" …「」『』【】〈〉《》≪≫"
-                style="font-family: 'Zen Kaku Gothic New';field-sizing: content;">
+              <input type="text" v-model="settingDic.delChar" style="font-family: 'Zen Kaku Gothic New';field-sizing: content;">
             </div>
           </div>
         </div>
-        <textarea id="skills"></textarea>
+        <textarea id="skills" v-model="skillText"></textarea>
         <p class="annotation">※半角スペースはアンダーバー(_)で代記</p>
 
       </section>
@@ -95,139 +95,82 @@
         <h2>出力</h2>
         <div class="outputDiv">
           <div class="outputL">
+
             <table id="paramsTable" class="valueTable secretTable" style="grid-row: 1 / 3;">
               <caption>
                 パラメータ
-                <button class="icon-frame narrow">
+                <button class="icon-frame narrow" @click="addRow('params')">
                   <div class="icon icon-plus"></div>
                 </button>
-                <button class="icon-frame narrow">
+                <button class="icon-frame narrow" @click="deleteRow('params')">
                   <div class="icon icon-minus"></div>
                 </button>
               </caption>
               <tbody>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <th>STR</th>
+                <tr v-for="[key,dic] in defStats.params" :key="dic.id" @click="dic.del=!dic.del">
+                  <td><input type="checkbox" v-model="dic.del"></td>
+                  <th>{{key}}</th>
+                  <td>{{dic.value}}</td>
+                </tr>                
+                <tr v-for="param in exStats.params" :key="param.id">
                   <td></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <th>CON</th>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <th>POW</th>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <th>DEX</th>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <th>APP</th>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <th>SIZ</th>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <th>INT</th>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <th>EDU</th>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <th>DB</th>
-                  <td></td>
+                  <th><input type="text" v-model="param.title"/></th>
+                  <td><input type="text" v-model="param.value"/></td>
                 </tr>
               </tbody>
             </table>
+
             <table id="statsTable" class="valueTable secretTable">
               <caption>
                 ステータス
-                <button class="icon-frame narrow">
+                <button class="icon-frame narrow" @click="addRow('stats')">
                   <div class="icon icon-plus"></div>
                 </button>
-                <button class="icon-frame narrow">
+                <button class="icon-frame narrow" @click="deleteRow('stats')">
                   <div class="icon icon-minus"></div>
                 </button>
               </caption>
               <tbody>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <th>HP</th>
-                  <td></td>
+                <tr v-for="[key,dic] in defStats.stats" :key="dic.id" @click="dic.del=!dic.del">
+                  <td><input type="checkbox" v-model="dic.del"></td>
+                  <th>{{key}}</th>
+                  <td>{{dic.value}}</td>
                 </tr>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <th>MP</th>
+                <tr v-for="stat in exStats.stats" :key="stat.id">
                   <td></td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox"></td>
-                  <th>SAN</th>
-                  <td></td>
+                  <th><input type="text" v-model="stat.title"/></th>
+                  <td><input type="text" v-model="stat.value"/></td>
                 </tr>
               </tbody>
             </table>
+
             <table id="elseTable" class="valueTable">
               <caption>他</caption>
               <tbody>
-                <tr>
-                  <th>アイデア</th>
-                  <td></td>
-                </tr>
-                <tr>
-                  <th>幸運</th>
-                  <td></td>
-                </tr>
-                <tr>
-                  <th>知識</th>
-                  <td></td>
+                <tr v-for="[key,dic] in defStats.else" :key="dic.id">
+                  <th>{{key}}</th>
+                  <td>{{dic.value}}</td>
                 </tr>
               </tbody>
             </table>
+
             <table id="skillTable">
               <caption>技能</caption>
               <tbody>
-                <tr style="height: 1.5rem;">
-                  <th></th>
-                  <td></td>
+                <tr v-for="dic in skillList" :key="dic.id">
+                  <th :class="{disable : dic.noname}" @click="dic.noname = !dic.noname">
+                    {{dic.times ? `x${dic.times} ` : ''}}{{dic.name}}
+                  </th>
+                  <td>{{dic.value}}</td>
                 </tr>
-                <tr style="height: 1.5rem;">
-                  <th></th>
-                  <td></td>
-                </tr>
-                <tr style="height: 1.5rem;">
-                  <th></th>
-                  <td></td>
-                </tr>
-                <tr style="height: 1.5rem;">
-                  <th></th>
-                  <td></td>
-                </tr>
-                <tr style="height: 1.5rem;">
-                  <th></th>
-                  <td></td>
-                </tr>
-                <tr style="height: 1.5rem;">
+                <tr v-for="val in fillBlank_skill">
                   <th></th>
                   <td></td>
                 </tr>
               </tbody>
             </table>
           </div>
+
           <table id="chatTable" class="secretTable">
             <thead>
               <tr>
@@ -237,124 +180,29 @@
               </tr>
             </thead>
             <tbody>
-              <tr style="height: 1.5rem;">
+              <tr v-for="text in chatList2">
                 <td></td>
                 <td></td>
-                <td></td>
+                <td>{{text}}</td>
               </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr style="height: 1.5rem;">
+              <tr v-for="val in fillBlank_chat">
                 <td></td>
                 <td></td>
                 <td></td>
               </tr>
             </tbody>
           </table>
+
           <div class="settingWrapper" name="chatTarget">
-            <span>差分</span>
-            <label class="toggle-button">
-              <input type="checkbox" value="diff" checked />
-              <span class="slider"></span>
-            </label>
-
-            <span>SANc</span>
-            <label class="toggle-button">
-              <input type="checkbox" value="sanc" />
-              <span class="slider"></span>
-            </label>
-
-            <span>知識etc.</span>
-            <label class="toggle-button">
-              <input type="checkbox" value="ide" checked />
-              <span class="slider"></span>
-            </label>
-
-            <span>技能</span>
-            <label class="toggle-button">
-              <input type="checkbox" value="skill" checked />
-              <span class="slider"></span>
-            </label>
-
-            <span>ステ*5</span>
-            <label class="toggle-button">
-              <input type="checkbox" value="stats" checked />
-              <span class="slider"></span>
-            </label>
+            <template v-for="data in chatTargets" :key="data.id">
+              <span>{{data.title}}</span>
+              <label class="toggle-button">
+                <input type="checkbox" :value="data.name" v-model="data.value"/>
+                <span class="slider"></span>
+              </label>
+            </template>
           </div>
+
         </div>
       </section>
 
@@ -423,7 +271,10 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
       <button id="exChat" class="export">チャパレ出力</button>
     </div>
   </div>
-  <script type="module" src="code.js"></script>
+  
+  <!-- <script type="module" src="./code.js"></script> -->
+  <script type="module" src="./code_vue.js"></script>
 </body>
 
 </html>
+

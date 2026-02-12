@@ -50,11 +50,13 @@ const chatTable   = document.querySelector('#chatTable tbody');
 
 // event for D&D
 const dragEvent = new Map([
-  ['dragstart',dragStart2], 
-  ['dragenter',switchRow], 
+  ['dragenter',dragEnter], 
+  ['dragleave',dragLeave],
   ['dragover', dragOver],
-  ['dragend', dragEnd2]
+  ['dragstart',dragStart], 
+  ['drop',drop],
 ]);
+
 
 
 // -------------------------
@@ -63,17 +65,7 @@ const dragEvent = new Map([
 initProcess();
 async function initProcess() {
   const json = await fetch('./setting.json').then(res=>res.json());
-  
-  nameEl.placeholder   = json.placeholder.name.join('\n');
-  statsEl.placeholder  = json.placeholder.stats.join('\n');
-  skillsEl.placeholder = json.placeholder.skills.join('\n');
-  
-  const changeLogTable = document.querySelector('footer table tbody');
-  json.changeLog.forEach(log=>addRow(changeLogTable, [log.date, log.version, log.detail]));
-
   settingDic = structuredClone(json.setting);
-  document.getElementById('delChar').value = json.deleteChar;
-  
   return;
 }
 
@@ -294,9 +286,9 @@ skillsEl.addEventListener('change', createChatList);
 document.getElementById('clear').addEventListener('click', clearTextarea);
 
 // 消去する文字
-document.getElementById('delChar').addEventListener('change', updateValueTables);
-document.getElementById('delChar').addEventListener('change', createSkillList);
-document.getElementById('delChar').addEventListener('change', createChatList);
+// document.getElementById('delChar').addEventListener('change', updateValueTables);
+// document.getElementById('delChar').addEventListener('change', createSkillList);
+// document.getElementById('delChar').addEventListener('change', createChatList);
 
 // チャットターゲット
 document.querySelectorAll('[name=chatTarget] input[type=checkbox]').forEach(input => input.addEventListener('change', createChatList));
@@ -409,161 +401,174 @@ function updateValueTables () {
   return;
 }
 
-/**
- * skillsEL --> skill list --> skill table
- */
-function createSkillList () {
-  console.log('❚ createSkillList');
-  skillList.splice(0);
+// /**
+//  * skillsEL --> skill list --> skill table
+//  */
+// function createSkillList () {
+//   console.log('❚ createSkillList');
+//   skillList.splice(0);
+//   // skillList = [];
 
-  // -----------------------
-  // skillsELの値を取得・整形
-  // -----------------------
-  const baseArr =  [
-    [/　/g, ' '],
-    [/[！-｝]/g, function(s){return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);}],
-    [new RegExp(`[${document.getElementById('delChar').value}]`,'g'), ''],
-    [/_/g, ' '],
-  ]
-  .reduce((acc,cur) => acc.replaceAll(cur[0],cur[1]), skillsEl.value)
-  .split(/\n|%/)
-  .filter(Boolean);
+//   // -----------------------
+//   // skillsELの値を取得・整形
+//   // -----------------------
+//   const baseArr =  [
+//     [/　/g, ' '],
+//     [/[！-｝]/g, function(s){return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);}],
+//     [new RegExp(`[${document.getElementById('delChar').value}]`,'g'), ''],
+//     [/_/g, ' '],
+//   ]
+//   .reduce((acc,cur) => acc.replaceAll(cur[0],cur[1]), skillsEl.value)
+//   .split(/\n|%/)
+//   .filter(Boolean);
   
-  // -----------------------
-  //     skillList 作成
-  // -----------------------
-  // (?(?:{?DB}?|\d+D\d+|\d+|{.+?}))?
-  const b = '\\(?(?:\\{?DB\\}?|\\d+D\\d+|\\d+|\\{.+?\\})\\)?';  // db,1d3,2,{...}
-  const dicePattern = `${b}(?:[-+*/]${b})*`;
+//   // -----------------------
+//   //     skillList 作成
+//   // -----------------------
+//   // (?(?:{?DB}?|\d+D\d+|\d+|{.+?}))?
+//   const b = '\\(?(?:\\{?DB\\}?|\\d+D\\d+|\\d+|\\{.+?\\})\\)?';  // db,1d3,2,{...}
+//   const dicePattern = `${b}(?:[-+*/]${b})*`;
 
-  baseArr.forEach(base => {
-    const dic = {type:null, name:'', value:null, times:null, noname:false};
+//   baseArr.forEach(base => {
+//     const dic = {type:null, name:'', value:null, times:null, noname:false};
+//     // let dic, times;
 
-    // 複数回ロール
-    if (/^(?:x|rep|repeat)\d+/.test(base)) {
-      times = parseInt(base.match(/^(?:x|rep|repeat)(\d+)/i)[1]);
-      base = base.replace(/(?:x|rep|repeat)\d+ */i,'');
-      dic.times = times;
-    }
+//     // 複数回ロール
+//     if (/^(?:x|rep|repeat)\d+/.test(base)) {
+//       times = parseInt(base.match(/^(?:x|rep|repeat)(\d+)/i)[1]);
+//       base = base.replace(/(?:x|rep|repeat)\d+ */i,'');
+//       dic.times = times;
+//     }
     
-    // ---------------------
+//     // ---------------------
     
-    // command
-    if (/^@|^:|^\/(?:scene|save|load|pdf|var|play|roll-table|omikuji)/i.test(base)) {
-      dic.type = 'line';
-      dic.value = base;
+//     // command
+//     if (/^@|^:|^\/(?:scene|save|load|pdf|var|play|roll-table|omikuji)/i.test(base)) {
+//       dic.type = 'line';
+//       dic.value = base;
+//       // dic = {type:'line', name:'', value:base};
 
-    // choice
-    } else if (base.indexOf('choice') > -1) {
-      const choice = base.match(/choice\d*(?:\[.+\]|\(.+\)| .+)/i)?.[0];
-      if (!choice) return;
-      dic.type = 'choice';
-      dic.name = base.replace(choice,'');
-      dic.value = choice;
+//     // choice
+//     } else if (base.indexOf('choice') > -1) {
+//       const choice = base.match(/choice\d*(?:\[.+\]|\(.+\)| .+)/i)?.[0];
+//       if (!choice) return;
+//       dic.type = 'choice';
+//       dic.name = base.replace(choice,'');
+//       dic.value = choice;
+//       // dic = {type:'choice', name:base.replace(choice,''), value:choice};
 
-    } else if (base.indexOf('チョイス') > -1) {
-      const arr = base.match(/チョイス(\d*) *(.+)/i);
-      if (!arr) return;
-      const [choice, cTimes, option] = arr.slice(0,3);
-      const value = `choice${cTimes}[${option.split(/[,、， ]/).filter(Boolean).join(',')}]`;
-      dic.type = 'choice';
-      dic.name = base.replace(choice,'');
-      dic.value = value;
+//     } else if (base.indexOf('チョイス') > -1) {
+//       const arr = base.match(/チョイス(\d*) *(.+)/i);
+//       if (!arr) return;
+//       const [choice, cTimes, option] = arr.slice(0,3);
+//       const value = `choice${cTimes}[${option.split(/[,、， ]/).filter(Boolean).join(',')}]`;
+//       dic.type = 'choice';
+//       dic.name = base.replace(choice,'');
+//       dic.value = value;
+//       // dic = {type:'choice', name:base.replace(choice,''), value:value};
 
-    // 組み合わせロール
-    } else if (/CBR/i.test(base)) {
-      const [value,value1,value2] = base.match(/CBRB?\D*(\d+)\D+(\d+)\)?/i).slice(0,3);
-      dic.type = 'elseRoll';
-      dic.name = base.replace(value,'');
-      dic.value = `CBR(${value1},${value2})`;
+//     // 組み合わせロール
+//     } else if (/CBR/i.test(base)) {
+//       const [value,value1,value2] = base.match(/CBRB?\D*(\d+)\D+(\d+)\)?/i).slice(0,3);
+//       dic.type = 'elseRoll';
+//       dic.name = base.replace(value,'');
+//       dic.value = `CBR(${value1},${value2})`;
+//       // dic = {type:'elseRoll', name:base.replace(value,''), value:`CBR(${value1},${value2})`};
       
-    // 対抗ロール
-    } else if (/RES/i.test(base)) {
-      const [value,value1,value2] = base.match(/RESB?\D*(\d+)\D+(\d+)\)?/i).slice(0,3);
-      dic.type='elseRoll';
-      dic.name = base.replace(value,'');
-      dic.value - `RES(${value1}-${value2})`;
+//     // 対抗ロール
+//     } else if (/RES/i.test(base)) {
+//       const [value,value1,value2] = base.match(/RESB?\D*(\d+)\D+(\d+)\)?/i).slice(0,3);
+//       dic.type='elseRoll';
+//       dic.name = base.replace(value,'');
+//       dic.value - `RES(${value1}-${value2})`;
+//       // dic = {type:'elseRoll', name:base.replace(value,''), value:`RES(${value1}-${value2})`};
 
-    // CCB<=70 skill
-    } else if (/(?:1d100|CCB?)<=/i.test(base)) {
-      const arr = base.match(new RegExp(`<=(${dicePattern}) *(.*)`,'i'));
-      dic.type = 'roll';
-      dic.name = arr[2];
-      dic.value = arr[1];
+//     // CCB<=70 skill
+//     } else if (/(?:1d100|CCB?)<=/i.test(base)) {
+//       const arr = base.match(new RegExp(`<=(${dicePattern}) *(.*)`,'i'));
+//       dic.type = 'roll';
+//       dic.name = arr[2];
+//       dic.value = arr[1];
+//       // dic = {type:'roll', name:arr[2], value:arr[1]};
       
-    // CCB skill @70
-    } else if (/(?:1d100|CCB?).*@\d+$/i.test(base)) {
-      const arr = base.match(/(?:1d100|CCB?) *(.*) *@(\d+)$/i);
-      dic.type = 'roll';
-      dic.name = arr[1];
-      dic.value = arr[2];
+//     // CCB skill @70
+//     } else if (/(?:1d100|CCB?).*@\d+$/i.test(base)) {
+//       const arr = base.match(/(?:1d100|CCB?) *(.*) *@(\d+)$/i);
+//       dic.type = 'roll';
+//       dic.name = arr[1];
+//       dic.value = arr[2];
+//       // dic = {type:'roll', name:arr[1], value:arr[2]};
 
-    // 1d3
-    } else if (/\dD\d/i.test(base)) {
-      let value = base.match(new RegExp(dicePattern,'i'))[0];
-      const name = base.replace(value,'');
-      value = value.replace(/\/1$/i,'').replace(/\{?db\}?/gi,'{DB}');
-      dic.type = 'dice';
-      dic.name = name;
-      dic.value = value;
+//     // 1d3
+//     } else if (/\dD\d/i.test(base)) {
+//       let value = base.match(new RegExp(dicePattern,'i'))[0];
+//       const name = base.replace(value,'');
+//       value = value.replace(/\/1$/i,'').replace(/\{?db\}?/gi,'{DB}');
+//       dic.type = 'dice';
+//       dic.name = name;
+//       dic.value = value;
+//       // dic = {type:'dice', name:name, value:value};
 
-    // skill 70
-    } else {
-      const arr = base.match(new RegExp(`(.*?)(${dicePattern})\\D*$`,'i'));
-      if (!arr) {
-        console.log(`Not add to chat-palette : ${base}`);
-        return;
-      }
-      dic.type = 'roll';
-      dic.name = arr[1];
-      dic.value = arr[2];
-    }
+//     // skill 70
+//     } else {
+//       const arr = base.match(new RegExp(`(.*?)(${dicePattern})\\D*$`,'i'));
+//       if (!arr) {
+//         console.log(`Not add to chat-palette : ${base}`);
+//         return;
+//       }
+//       dic.type = 'roll';
+//       dic.name = arr[1];
+//       dic.value = arr[2];
+//       // dic = {type:'roll', name:arr[1], value:arr[2]};
+//     }
 
-    dic.name = dic.name.replace(/[()]/g, function(s){return String.fromCharCode(s.charCodeAt(0) + 0xFEE0);}).trim();
-    skillList.push(dic);
-  });
+//     // if(times)  dic.times = times;
+//     dic.name = dic.name.replace(/[()]/g, function(s){return String.fromCharCode(s.charCodeAt(0) + 0xFEE0);}).trim();
+//     skillList.push(dic);
+//   });
 
-  // -----------------------
-  //    skillTableの更新
-  // -----------------------
-  skillTable.innerHTML='';
-  if (!skillList.length) {
-    for (let i=0; i<6; i++) {
-      const row = addRow(skillTable, 2, 0);
-      row.style.height = '1.5rem';
-    }
-    return;
-  }
-  skillList.forEach(dic => {
-    const row = addRow(skillTable, 2, 0);
-    row.children[0].innerText = (dic.times ? `x${dic.times} ` : '') + dic.name;
-    row.children[1].innerText = dic.value;
+//   // -----------------------
+//   //    skillTableの更新
+//   // -----------------------
+//   skillTable.innerHTML='';
+//   if (!skillList.length) {
+//     for (let i=0; i<6; i++) {
+//       const row = addRow(skillTable, 2, 0);
+//       row.style.height = '1.5rem';
+//     }
+//     return;
+//   }
+//   skillList.forEach(dic => {
+//     const row = addRow(skillTable, 2, 0);
+//     row.children[0].innerText = (dic.times ? `x${dic.times} ` : '') + dic.name;
+//     row.children[1].innerText = dic.value;
 
-    // 技能名をクリックでチャット欄の技能名表示を切り替える
-    // skillListとchatListで参照しているdicが同じなため、skillListだけ切り替えればOK
-    row.children[0].addEventListener('click', (e) => {
-      const i = e.currentTarget.parentElement.sectionRowIndex;
-      if (e.currentTarget.style.color) {
-        e.currentTarget.style.color = null;
-        e.currentTarget.style.textDecoration = null;
-        skillList[i].noname = false;
-      } else {
-        e.currentTarget.style.color = 'rgb(0 0 0 /0.33)';
-        e.currentTarget.style.textDecoration = 'line-through';
-        skillList[i].noname = true;
-      }
-      updateChat();
-    });
-  });
+//     // 技能名をクリックでチャット欄の技能名表示を切り替える
+//     // skillListとchatListで参照しているdicが同じなため、skillListだけ切り替えればOK
+//     row.children[0].addEventListener('click', (e) => {
+//       const i = e.currentTarget.parentElement.sectionRowIndex;
+//       if (e.currentTarget.style.color) {
+//         e.currentTarget.style.color = null;
+//         e.currentTarget.style.textDecoration = null;
+//         skillList[i].noname = false;
+//       } else {
+//         e.currentTarget.style.color = 'rgb(0 0 0 /0.33)';
+//         e.currentTarget.style.textDecoration = 'line-through';
+//         skillList[i].noname = true;
+//       }
+//       updateChat();
+//     });
+//   });
 
-  return;
-}
+//   return;
+// }
 
 /**
  * status table, skill list --> chat list --> chat table
  */
 function createChatList() {
   chatList.splice(0);
+  // chatList = [];
   
   // -----------------------
   //     chatList 作成
@@ -631,11 +636,11 @@ function createChatList() {
   for (let i=0; i<chatList.length; i++) {
     const row = addRow(chatTable, 3, -1);
     row.draggable = true;
-    new Map([
-      ['dragstart',dragStart2], ['dragenter',switchRowDic], ['dragover',dragOver], ['dragend',dragEnd2]
-    ])
-      .forEach((value,key) => row.addEventListener(key,value));
-    
+    new Map([['dragstart',dragStart], ['drop',[drop,dropAdd]]])
+      .forEach((value,key) => {
+        if (typeof(value)=='function') row.addEventListener(key,value);
+        else value.forEach(val=>row.addEventListener(key,val));
+      });
     const cell1 = row.children[0];
     const cell2 = row.children[1];
     const cell3 = row.children[2];
@@ -825,52 +830,27 @@ function toggleSecretCheckbox (e)  {
   input.checked = !input.checked;
 }
 
-let dragIndex = null;
-function dragStart2 (e) {
-  dragIndex = e.currentTarget.sectionRowIndex;
-  e.currentTarget.classList.add('dragging');
-}
-function dragEnd2 (e) {
-  dragIndex = null;
-  e.currentTarget.classList.remove('dragging');
-}
-
-function switchRow (e) {
-  if (e.currentTarget.sectionRowIndex===dragIndex) return;
-  const index = e.currentTarget.sectionRowIndex;
-  const parent = e.currentTarget.parentElement;
-  const deleteElement = parent.children[dragIndex];
-
-  deleteElement.remove();
-
-  const target = parent.children[index];
-  if (target) target.before(deleteElement);
-  else parent.appendChild(deleteElement);
-
-  dragIndex = index;
-}
-
-function switchRowDic (e) {
-  if (e.currentTarget.sectionRowIndex===dragIndex) return;
-  const index = e.currentTarget.sectionRowIndex;
-  const parent = e.currentTarget.parentElement;
-  
-  const deleteElement = parent.children[dragIndex];
-  deleteElement.remove();
-  const deleteDic = chatList.splice(dragIndex, 1);
-
-  const target = parent.children[index];
-  if (target) target.before(deleteElement);
-  else parent.appendChild(deleteElement);
-
-  chatList.splice(index, 0, ...deleteDic);
-
-  dragIndex = index;
-}
-
+function dragEnter (e) {e.currentTarget.classList.add('target')}
+function dragLeave (e) {e.currentTarget.classList.remove('target')}
 function dragOver  (e) {e.preventDefault()};
 
+function dragStart (e) {
+  e.dataTransfer.setData('text/plain', e.currentTarget.sectionRowIndex);
+}
 
+function drop (e) {
+  e.currentTarget.classList.remove('target');
+  const startIndex = parseInt(e.dataTransfer.getData('text/plain'));
+  e.currentTarget.before(e.currentTarget.parentElement.children[startIndex]);
+}
+
+function dropAdd (e) {
+  const startIndex = parseInt(e.dataTransfer.getData('text/plain'));
+  const startDic = chatList[startIndex];
+  const dropIndex  = e.currentTarget.rowIndex-2;
+  chatList.splice(startIndex,1);
+  chatList.splice(dropIndex, 0, startDic);
+}
 
 // else
 function getChatpalette() {
