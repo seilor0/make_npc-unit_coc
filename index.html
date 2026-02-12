@@ -201,9 +201,9 @@
 
           <div class="settingWrapper" name="chatTarget">
             <template v-for="data in chatTargets" :key="data.id">
-              <span>{{data.title}}</span>
+              <span>{{data.name}}</span>
               <label class="toggle-button">
-                <input type="checkbox" :value="data.name" v-model="data.value"/>
+                <input type="checkbox" v-model="data.value"/>
                 <span class="slider"></span>
               </label>
             </template>

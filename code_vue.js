@@ -10,11 +10,11 @@ const rootApp = createApp({
     const settingDic = ref({});
 
     const chatTargets = ref([
-      { id: id++, title: '差分', name: 'diff', value: true },
-      { id: id++, title: 'SANc', name: 'sanc', value: false },
-      { id: id++, title: '知識etc.', name: 'ide', value: true },
-      { id: id++, title: '技能', name: 'skill', value: true },
-      { id: id++, title: 'ステ*5', name: 'stats', value: true },
+      { id: id++, name: '差分', value: true },
+      { id: id++, name: 'SANc', value: false },
+      { id: id++, name: '知識etc.', value: true },
+      { id: id++, name: '技能', value: true },
+      { id: id++, name: 'ステ*5', value: true },
     ]);
 
     const defStats = ref({
@@ -87,7 +87,7 @@ const rootApp = createApp({
       const rawDicArr = [];
       chatTargets.value
         .filter(dic => dic.value)
-        .map(dic => dic.title)
+        .map(dic => dic.name)
         .forEach(chatTarget => {
 
           // 差分
@@ -422,6 +422,3 @@ HP 12  MP 30  SAN 10  DB +1D4
   }
 });
 rootApp.mount('#root');
-
-
-
