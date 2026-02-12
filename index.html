@@ -34,6 +34,10 @@
           <span class="material-symbols-outlined">input</span>
           コマをインポート
         </button>
+
+        <button class="aside-button" @click="toTest">to test</button>
+        <button class="aside-button" @click="skillList.pop()">pop</button>
+        <button class="aside-button" @click="skillList[0].value=1000">change value</button>
       </aside>
 
       <!-- 入力欄 -->
@@ -79,11 +83,11 @@
               <p style="margin-block: 0.5rem;">
                 <span class="title">消す文字（正規表現）：</span>
               </p>
-              <input type="text" v-model="settingDic.delChar" style="font-family: 'Zen Kaku Gothic New';field-sizing: content;">
+              <input type="text" v-model="settingDic.delChar" @input="updateSkillList" style="font-family: 'Zen Kaku Gothic New';field-sizing: content;">
             </div>
           </div>
         </div>
-        <textarea id="skills" v-model="skillText"></textarea>
+        <textarea id="skills" @input="updateSkillList"></textarea>
         <p class="annotation">※半角スペースはアンダーバー(_)で代記</p>
 
       </section>
@@ -107,11 +111,11 @@
                 </button>
               </caption>
               <tbody>
-                <tr v-for="[key,dic] in defStats.params" :key="dic.id" @click="dic.del=!dic.del">
+                <tr v-for="[key,dic] in defStats.params" :key="dic.id" :class="{disable: dic.del}" @click="dic.del=!dic.del">
                   <td><input type="checkbox" v-model="dic.del"></td>
                   <th>{{key}}</th>
                   <td>{{dic.value}}</td>
-                </tr>                
+                </tr>
                 <tr v-for="param in exStats.params" :key="param.id">
                   <td></td>
                   <th><input type="text" v-model="param.title"/></th>
@@ -131,7 +135,7 @@
                 </button>
               </caption>
               <tbody>
-                <tr v-for="[key,dic] in defStats.stats" :key="dic.id" @click="dic.del=!dic.del">
+                <tr v-for="[key,dic] in defStats.stats" :key="dic.id" :class="{disable: dic.del}" @click="dic.del=!dic.del">
                   <td><input type="checkbox" v-model="dic.del"></td>
                   <th>{{key}}</th>
                   <td>{{dic.value}}</td>
@@ -180,10 +184,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="text in chatList2">
-                <td></td>
-                <td></td>
-                <td>{{text}}</td>
+              <tr v-for="dic in refChatList">
+                <td><input type="checkbox" v-model="dic.del"></td>
+                <td><input type="checkbox" v-model="dic.secret"></td>
+                <td :class="{disable: dic.del}" @click="dic.del=!dic.del">
+                  {{dic.times}}{{dic.secret ? 's' : ''}}{{dic.text}}
+                </td>
               </tr>
               <tr v-for="val in fillBlank_chat">
                 <td></td>

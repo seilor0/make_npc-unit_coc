@@ -567,11 +567,6 @@ tr.target > * {border-block-start: 3px solid salmon;}
     visibility: hidden;
     :hover > & {visibility: visible;}
   }
-  
-  tr:has(> :first-child > :checked) {
-    text-decoration: line-through;
-    color: rgba(0,0,0,0.33);
-  }
 }
 /* --------------------------- */
 
