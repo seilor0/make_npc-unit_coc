@@ -417,7 +417,6 @@ function updateValueTables () {
 function createSkillList () {
   console.log('❚ createSkillList');
   skillList.splice(0);
-  // skillList = [];
 
   // -----------------------
   // skillsELの値を取得・整形
@@ -441,7 +440,6 @@ function createSkillList () {
 
   baseArr.forEach(base => {
     const dic = {type:null, name:'', value:null, times:null, noname:false};
-    // let dic, times;
 
     // 複数回ロール
     if (/^(?:x|rep|repeat)\d+/.test(base)) {
@@ -456,7 +454,6 @@ function createSkillList () {
     if (/^@|^:|^\/(?:scene|save|load|pdf|var|play|roll-table|omikuji)/i.test(base)) {
       dic.type = 'line';
       dic.value = base;
-      // dic = {type:'line', name:'', value:base};
 
     // choice
     } else if (base.indexOf('choice') > -1) {
@@ -465,7 +462,6 @@ function createSkillList () {
       dic.type = 'choice';
       dic.name = base.replace(choice,'');
       dic.value = choice;
-      // dic = {type:'choice', name:base.replace(choice,''), value:choice};
 
     } else if (base.indexOf('チョイス') > -1) {
       const arr = base.match(/チョイス(\d*) *(.+)/i);
@@ -475,7 +471,6 @@ function createSkillList () {
       dic.type = 'choice';
       dic.name = base.replace(choice,'');
       dic.value = value;
-      // dic = {type:'choice', name:base.replace(choice,''), value:value};
 
     // 組み合わせロール
     } else if (/CBR/i.test(base)) {
@@ -483,7 +478,6 @@ function createSkillList () {
       dic.type = 'elseRoll';
       dic.name = base.replace(value,'');
       dic.value = `CBR(${value1},${value2})`;
-      // dic = {type:'elseRoll', name:base.replace(value,''), value:`CBR(${value1},${value2})`};
       
     // 対抗ロール
     } else if (/RES/i.test(base)) {
@@ -491,7 +485,6 @@ function createSkillList () {
       dic.type='elseRoll';
       dic.name = base.replace(value,'');
       dic.value - `RES(${value1}-${value2})`;
-      // dic = {type:'elseRoll', name:base.replace(value,''), value:`RES(${value1}-${value2})`};
 
     // CCB<=70 skill
     } else if (/(?:1d100|CCB?)<=/i.test(base)) {
@@ -499,7 +492,6 @@ function createSkillList () {
       dic.type = 'roll';
       dic.name = arr[2];
       dic.value = arr[1];
-      // dic = {type:'roll', name:arr[2], value:arr[1]};
       
     // CCB skill @70
     } else if (/(?:1d100|CCB?).*@\d+$/i.test(base)) {
@@ -507,7 +499,6 @@ function createSkillList () {
       dic.type = 'roll';
       dic.name = arr[1];
       dic.value = arr[2];
-      // dic = {type:'roll', name:arr[1], value:arr[2]};
 
     // 1d3
     } else if (/\dD\d/i.test(base)) {
@@ -517,7 +508,6 @@ function createSkillList () {
       dic.type = 'dice';
       dic.name = name;
       dic.value = value;
-      // dic = {type:'dice', name:name, value:value};
 
     // skill 70
     } else {
@@ -529,10 +519,8 @@ function createSkillList () {
       dic.type = 'roll';
       dic.name = arr[1];
       dic.value = arr[2];
-      // dic = {type:'roll', name:arr[1], value:arr[2]};
     }
 
-    // if(times)  dic.times = times;
     dic.name = dic.name.replace(/[()]/g, function(s){return String.fromCharCode(s.charCodeAt(0) + 0xFEE0);}).trim();
     skillList.push(dic);
   });
@@ -578,7 +566,6 @@ function createSkillList () {
  */
 function createChatList() {
   chatList.splice(0);
-  // chatList = [];
   
   // -----------------------
   //     chatList 作成
