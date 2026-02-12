@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NPCコマ作成</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="root">
+    <main>
+      <!-- 左メニュー -->
+      <aside>
+        <h1>NPCコマ<br>作成ツール</h1>
+        <button id="how2use" popovertarget="modal" class="aside-button" style="background-color: lightsalmon;">
+          使い方
+        </button>
+        <button id="useful" popovertarget="modal" class="aside-button" style="background-color: lightsalmon;">
+          便利機能
+        </button>
+
+        <button id="diceSetting" popovertarget="modal" class="aside-button">
+          <span class="material-symbols-outlined">settings</span>
+          チャパレ設定
+        </button>
+        <button id="unitSetting" popovertarget="modal" class="aside-button">
+          <span class="material-symbols-outlined">settings</span>
+          コマ設定
+        </button>
+        <button id="importUnit" popovertarget="modal" class="aside-button">
+          <span class="material-symbols-outlined">input</span>
+          コマをインポート
+        </button>
+      </aside>
+
+      <!-- 入力欄 -->
+      <section style="width: 23rem;">
+        <hgroup>
+          <h2>入力</h2>
+          <button id="clear">CLEAR</button>
+        </hgroup>
+
+        <!-- 名前欄 -->
+        <div class="title" style="margin-block-start: 0;">
+          名前/メモ欄
+        </div>
+        <textarea id="name"></textarea>
+
+        <!-- 能力値 -->
+        <div class="title">
+          能力値 etc.
+          <div class="tips">
+            <span class="material-symbols-outlined">info</span>
+            <div>
+              <ul>
+                <li class="ok">途中改行</li>
+                <li class="ok">謎の半角/全角スペース</li>
+                <li class="ok">全角英数字</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <textarea id="stats"></textarea>
+
+        <!-- 技能・ダイス・choice -->
+        <div class="title">
+          技能・ダイス etc.
+          <div class="tips">
+            <span class="material-symbols-outlined">info</span>
+            <div>
+              <ul>
+                <li class="ng">途中改行</li>
+                <li class="ok">謎の半角/全角スペース</li>
+                <li class="ok">全角の記号/英数字</li>
+              </ul>
+              <p style="margin-block: 0.5rem;">
+                <span class="title">消す文字（正規表現）：</span>
+              </p>
+              <input type="text" id="delChar" value=" …「」『』【】〈〉《》≪≫"
+                style="font-family: 'Zen Kaku Gothic New';field-sizing: content;">
+            </div>
+          </div>
+        </div>
+        <textarea id="skills"></textarea>
+        <p class="annotation">※半角スペースはアンダーバー(_)で代記</p>
+
+      </section>
+
+      <div class="triangle"></div>
+
+      <!-- 出力欄 -->
+      <section style="width: max-content;">
+        <h2>出力</h2>
+        <div class="outputDiv">
+          <div class="outputL">
+            <table id="paramsTable" class="valueTable secretTable" style="grid-row: 1 / 3;">
+              <caption>
+                パラメータ
+                <button class="icon-frame narrow">
+                  <div class="icon icon-plus"></div>
+                </button>
+                <button class="icon-frame narrow">
+                  <div class="icon icon-minus"></div>
+                </button>
+              </caption>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <th>STR</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <th>CON</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <th>POW</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <th>DEX</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <th>APP</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <th>SIZ</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <th>INT</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <th>EDU</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <th>DB</th>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+            <table id="statsTable" class="valueTable secretTable">
+              <caption>
+                ステータス
+                <button class="icon-frame narrow">
+                  <div class="icon icon-plus"></div>
+                </button>
+                <button class="icon-frame narrow">
+                  <div class="icon icon-minus"></div>
+                </button>
+              </caption>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <th>HP</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <th>MP</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <th>SAN</th>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+            <table id="elseTable" class="valueTable">
+              <caption>他</caption>
+              <tbody>
+                <tr>
+                  <th>アイデア</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>幸運</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>知識</th>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+            <table id="skillTable">
+              <caption>技能</caption>
+              <tbody>
+                <tr style="height: 1.5rem;">
+                  <th></th>
+                  <td></td>
+                </tr>
+                <tr style="height: 1.5rem;">
+                  <th></th>
+                  <td></td>
+                </tr>
+                <tr style="height: 1.5rem;">
+                  <th></th>
+                  <td></td>
+                </tr>
+                <tr style="height: 1.5rem;">
+                  <th></th>
+                  <td></td>
+                </tr>
+                <tr style="height: 1.5rem;">
+                  <th></th>
+                  <td></td>
+                </tr>
+                <tr style="height: 1.5rem;">
+                  <th></th>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <table id="chatTable" class="secretTable">
+            <thead>
+              <tr>
+                <th>✕</th>
+                <th>s</th>
+                <th>chat palette</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style="height: 1.5rem;">
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="settingWrapper" name="chatTarget">
+            <span>差分</span>
+            <label class="toggle-button">
+              <input type="checkbox" value="diff" checked />
+              <span class="slider"></span>
+            </label>
+
+            <span>SANc</span>
+            <label class="toggle-button">
+              <input type="checkbox" value="sanc" />
+              <span class="slider"></span>
+            </label>
+
+            <span>知識etc.</span>
+            <label class="toggle-button">
+              <input type="checkbox" value="ide" checked />
+              <span class="slider"></span>
+            </label>
+
+            <span>技能</span>
+            <label class="toggle-button">
+              <input type="checkbox" value="skill" checked />
+              <span class="slider"></span>
+            </label>
+
+            <span>ステ*5</span>
+            <label class="toggle-button">
+              <input type="checkbox" value="stats" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div class="footerContent">
+        <div>
+          <h2>CONTACT</h2>
+          <span style="font-size: larger;">セイル</span>
+          <br>
+          Booth: https://seils.booth.pm/
+          <br>
+          X(旧Twitter): @seilor0
+        </div>
+        <div>
+          <h2>CAUTION</h2>
+          <ul>
+            <li>
+              作業環境：Windows11 / Google Chrome
+              <br>
+              上記以外の環境はテストしていないため、不具合が出る可能性があります。
+            </li>
+            <li>
+              当サイトの利用によるいかなるトラブルも作者は責任を負いません。
+              <br>
+              ご利用は自己責任にてお願いいたします。
+            </li>
+            <li>
+              何かあれば左の連絡先までご連絡ください。
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h2>UPDATE</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>date</th>
+                <th>version</th>
+                <th>detail</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <pre style="text-align: center;margin-block-end: unset;white-space: pre-wrap;">
+当サイトは、「株式会社アークライト」及び「株式会社KADOKAWA」が権利を有する『クトゥルフ神話TRPG』シリーズの二次創作物です。
+Call of Cthulhu is copyright ©1981, 2015, 2019 by Chaosium Inc. ;all rights reserved. Arranged by Arclight Inc. Call of Cthulhu is a registered trademark of Chaosium Inc.
+PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥルフ神話TRPG」</pre>
+    </footer>
+
+    <dialog id="modal" popover="auto">
+      <header>
+        <h2>Sample Modal Title</h2>
+        <button class="icon-frame" popovertarget="modal" popovertargetaction="hide">
+          <div class="icon icon-close"></div>
+        </button>
+      </header>
+      <section></section>
+    </dialog>
+
+    <div class="buttonWrap">
+      <button id="exUnit" class="export">ココフォリアコマ出力</button>
+      <button id="exChat" class="export">チャパレ出力</button>
+    </div>
+  </div>
+  <script type="module" src="code.js"></script>
+</body>
+
+</html>

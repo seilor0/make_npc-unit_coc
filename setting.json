@@ -1,0 +1,44 @@
+{
+  "changeLog":[{}],
+  "deleteChar": " :…「」『』【】〈〉\\[\\]《》≪≫",
+  "placeholder":{
+    "name": [
+      "1行目：名前",
+      "2行目～：メモ欄"
+    ],
+    "stats": [
+      "STR 8 ... EDU 15",
+      "HP 12  MP 30  SAN 10  DB +1D4",
+      "アイデア 75  幸運 60  知識 75"
+    ],
+    "skills": [
+      "・目星70% 聞き耳40% 図書館25%",
+      "・CCB<=50 こぶし（パンチ）",
+      "・1d4+db/2",
+      "・キック　50% / 1d6+db / 1R1回",
+      "",
+      "・チョイス",
+      "・対抗ロール",
+      "・組み合わせロール",
+      "・繰り返しロール",
+      "・@○○",
+      "・スラッシュコマンド（/scene etc.）",
+      "・コマンド（:HP+1）"
+    ]
+  },
+  "setting": {
+    "is6th": true,
+    "dice": "CCB",
+    "rollStyle": "@",
+    "secretSingleDice": false,
+    "secretChoice": false,
+  
+    "secretUnit": false,
+    "invisibleUnit": false,
+    "hideUnit": false,
+  
+    "color": "#888888",
+    "unitSize": 4,
+    "faces": []
+  }
+}
