@@ -22,15 +22,18 @@
           便利機能
         </button>
 
-        <button id="diceSetting" popovertarget="modal" class="aside-button">
+        <button id="diceSetting" class="aside-button" 
+          command="show-modal" commandfor="modal-dice-setting">
           <span class="material-symbols-outlined">settings</span>
           チャパレ設定
         </button>
-        <button id="unitSetting" popovertarget="modal" class="aside-button">
+        <button id="unitSetting" class="aside-button" 
+          command="show-modal" commandfor="modal-unit-setting">
           <span class="material-symbols-outlined">settings</span>
           コマ設定
         </button>
-        <button id="importUnit" popovertarget="modal" class="aside-button">
+        <button id="importUnit" class="aside-button" 
+          command="show-modal" commandfor="modal-import-unit">
           <span class="material-symbols-outlined">input</span>
           コマをインポート
         </button>
@@ -305,6 +308,115 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
       <section></section>
     </dialog>
 
+    <dialog id="modal-dice-setting" closedby="any">
+      <header>
+        <h2>チャパレ設定</h2>
+        <button class="icon-frame" command="close" commandfor="modal-dice-setting">
+          <div class="icon icon-close"></div>
+        </button>
+      </header>
+      <section class="settingWrapper" style="width: 22rem;">
+        <span>システム</span>
+        <label class="toggle-button">
+          <input type="checkbox" v-model="is6th">
+          <span class="slider"></span>
+          <span class="checked">CoC7th</span>
+          <span class="not-checked">CoC6th</span>
+        </label>
+        <span>判定ダイス</span>
+        <select v-model="settingDic.dice">
+          <option value="CC">CC</option>
+          <option value="CCB">CCB</option>
+          <option value="1d100">1d100</option>
+        </select>
+        <span>形式</span>
+        <select v-model="settingDic.rollStyle">
+          <option value="normal">{{settingDic.dice}}&lt;=70 【...】</option>
+          <option value="secret">s{{settingDic.dice}}&lt;=70 【...】</option>
+          <option value="@">{{settingDic.dice}} 【...】@70</option>
+        </select>
+        <span></span>
+        <div class="settingWrapper" style="margin: 0;column-gap: 0.5rem;">
+          <span>単体ダイス</span>
+          <label class="toggle-button">
+            <input type="checkbox" v-model="settingDic.secretSingleDice">
+            <span class="slider"></span>
+            <span class="checked">シークレット</span>
+            <span class="not-checked">オープン</span>
+          </label>
+          <span>choice</span>
+          <label class="toggle-button">
+            <input type="checkbox" v-model="settingDic.secretChoice">
+            <span class="slider"></span>
+            <span class="checked">シークレット</span>
+            <span class="not-checked">オープン</span>
+          </label>
+        </div>
+      </section>
+    </dialog>
+
+    <dialog id="modal-unit-setting" closedby="any">
+      <header>
+        <h2>キャラコマ設定</h2>
+        <button class="icon-frame" popovertarget="modal" popovertargetaction="hide">
+          <div class="icon icon-close"></div>
+        </button>
+      </header>
+      <section style="max-width: 22rem;">
+        <div class="settingWrapper">
+          <span>ステータス</span>
+          <label class="toggle-button">
+            <input type="checkbox">
+            <span class="slider"></span>
+            <span class="checked">秘匿</span>
+            <span class="not-checked">公開</span>
+          </label>
+          <span>発言アイコン</span>
+          <label class="toggle-button">
+            <input type="checkbox">
+            <span class="slider"></span>
+            <span class="checked">非表示</span>
+            <span class="not-checked">表示</span>
+          </label>
+          <span>コマ一覧</span>
+          <label class="toggle-button">
+            <input type="checkbox">
+            <span class="slider"></span>
+            <span class="checked">非表示</span>
+            <span class="not-checked">表示</span>
+          </label>
+        </div>
+        <hr>
+        <div class="settingWrapper">
+          <span>発言カラー</span>
+          <div style="display: grid;grid-template-columns: auto auto 1fr;gap: 0.5rem;align-items: center;">
+            <input type="color" v-model="settingDic.color">
+            <input type="text" v-model="settingDic.color" style="background-color: transparent;height: stretch;width: 7ch;" >
+            <p class="ccfoliaName" :style="{color: settingDic.color}">探索者名</p>
+          </div>
+          <span>コマサイズ</span>
+          <div style="display: flex;gap: 0.5rem;">
+            <input type="range" min="1" max="30" v-model="settingDic.unitSize" style="flex-grow: 1">
+            <input type="number" min="1" v-model="settingDic.unitSize">
+          </div>
+          <span>差分<span style="font-size: smaller;"> (ラベル)</span></span>
+          <textarea></textarea>
+        </div>
+      </section>
+    </dialog>
+
+    <dialog id="modal-import-unit" closedby="any">
+      <header>
+        <h2>ココフォリアコマをインポート</h2>
+        <button class="icon-frame" popovertarget="modal" popovertargetaction="hide">
+          <div class="icon icon-close"></div>
+        </button>
+      </header>
+      <section>
+        <textarea style="width: 20rem;max-height: 20rem;"></textarea>
+      </section>
+    </dialog>
+
     <div class="buttonWrap">
       <button id="exUnit" class="export">ココフォリアコマ出力</button>
       <button id="exChat" class="export">チャパレ出力</button>
@@ -316,4 +428,3 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
 </body>
 
 </html>
-

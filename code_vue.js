@@ -139,10 +139,10 @@ const rootApp = createApp({
         const result = {del:false, secret:false, text:'', times:''};
         
         if (
-          dic.type==='dice'     && settingDic.value.secretSingleDice ||
-          dic.type==='choice'   && settingDic.value.secretChoice     ||
-          dic.type==='roll'     && settingDic.value.rollStyle==='s'  ||
-          dic.type==='elseRoll' && settingDic.value.rollStyle==='s'
+          dic.type==='dice'     && settingDic.value.secretSingleDice     ||
+          dic.type==='choice'   && settingDic.value.secretChoice         ||
+          dic.type==='roll'     && settingDic.value.rollStyle==='secret' ||
+          dic.type==='elseRoll' && settingDic.value.rollStyle==='secret'
         ) result.secret = true;
 
         const dic2text = (dic) => {

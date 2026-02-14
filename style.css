@@ -435,7 +435,7 @@ div.title {
 /* --------------------------- */
 /*            modal            */
 
-#modal {
+dialog {
   background-color: #fafafa;
   border: 1px solid darkgray;
   border-radius: 7px;
