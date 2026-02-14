@@ -121,6 +121,7 @@ select {
 button {
   font-family: var(--basic-font);
   user-select: none;
+  cursor: pointer;
 }
 
 hr {
@@ -187,20 +188,20 @@ input[type="color"] {
   }
 }
 
-#exUnit {background-color: #418660;}
-#exChat {background-color: rgb(67 67 67 / 60%);}
 button.export {
+  --size: 6rem;
   color: white;
+  background-color: rgb(67 67 67 / 60%);
   border: 1px solid white;
   border-radius: 50%;
   box-shadow: -4px -4px 8px rgb(255 255 255 / 20%), 2px 3px 8px rgb(0 0 0 / 30%);
   font-weight: 700;
-  height: 6rem;
-  width: 6rem;
-  cursor: pointer;
+  height: var(--size);
+  width: var(--size);
+  /* cursor: pointer; */
 }
 
-button#clear {
+/* button#clear {
   color: #555;
   background-color: transparent;
   font-weight: 500;
@@ -212,7 +213,7 @@ button#clear {
     color: #eee;
     background-color: rgba(42, 99, 68, 0.9);
   }
-}
+} */
 
 .aside-button {
   color: white;
@@ -225,7 +226,7 @@ button#clear {
 
   height: 2.25rem;
   width: stretch;
-  cursor: pointer;
+  /* cursor: pointer; */
   font-size: calc(1rem - 1px);
   box-shadow: -4px -4px 8px #fff, 2px 2px 4px rgb(0 0 0 / 20%);
   margin-block: 1rem;
@@ -516,7 +517,6 @@ main table {
   }
 
   tbody {
-    /* tr:nth-of-type(even) { background-color: #eee; } */
     tr:nth-of-type(even) :is(th,td) { background-color: #eee; }
     th,td { border-block-end: 1px solid darkgray; }
     th    { border-inline-end: 3px dotted rgba(0,0,0,0.15); }
@@ -530,6 +530,8 @@ main table {
   }
   &:not(:has(thead)) tr:first-child > * { border-block-start: 1px solid darkgray; }
 }
+
+caption button {margin-inline-start: 4px;}
 
 #skillTable {
   grid-column: 1 / -1;

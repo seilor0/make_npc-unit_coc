@@ -45,7 +45,7 @@
       <section style="width: 23rem;">
         <hgroup>
           <h2>入力</h2>
-          <button id="clear">CLEAR</button>
+          <button @click="clear">CLEAR</button>
         </hgroup>
 
         <!-- 名前欄 -->
@@ -320,8 +320,8 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
         <label class="toggle-button">
           <input type="checkbox" v-model="is6th">
           <span class="slider"></span>
-          <span class="checked">CoC7th</span>
-          <span class="not-checked">CoC6th</span>
+          <span class="checked">CoC6th</span>
+          <span class="not-checked">CoC7th</span>
         </label>
         <span>判定ダイス</span>
         <select v-model="settingDic.dice">
@@ -366,21 +366,21 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
         <div class="settingWrapper">
           <span>ステータス</span>
           <label class="toggle-button">
-            <input type="checkbox">
+            <input type="checkbox" v-model="settingDic.secretUnit">
             <span class="slider"></span>
             <span class="checked">秘匿</span>
             <span class="not-checked">公開</span>
           </label>
           <span>発言アイコン</span>
           <label class="toggle-button">
-            <input type="checkbox">
+            <input type="checkbox" v-model="settingDic.invisibleUnit">
             <span class="slider"></span>
             <span class="checked">非表示</span>
             <span class="not-checked">表示</span>
           </label>
           <span>コマ一覧</span>
           <label class="toggle-button">
-            <input type="checkbox">
+            <input type="checkbox"  v-model="settingDic.hideUnit">
             <span class="slider"></span>
             <span class="checked">非表示</span>
             <span class="not-checked">表示</span>
@@ -400,7 +400,7 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
             <input type="number" min="1" v-model="settingDic.unitSize">
           </div>
           <span>差分<span style="font-size: smaller;"> (ラベル)</span></span>
-          <textarea></textarea>
+          <textarea :value="settingDic.faces?.join('\n')" @change="e => settingDic.faces = e.currentTarget.value.split('\n').filter(Boolean).map(row=>(row.startsWith('@')?'':'@')+row)"></textarea>
         </div>
       </section>
     </dialog>
@@ -418,8 +418,13 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
     </dialog>
 
     <div class="buttonWrap">
-      <button id="exUnit" class="export">ココフォリアコマ出力</button>
-      <button id="exChat" class="export">チャパレ出力</button>
+      <button id="exUnit" class="export" style="background-color: #418660;">
+        ココフォリアコマ出力
+      </button>
+      <!-- <button id="exUnit" class="export">ココフォリアコマ出力</button> -->
+      <button class="export" @click="copy2clipboard($event, getChatpalette())">
+        チャパレ出力
+      </button>
     </div>
   </div>
   

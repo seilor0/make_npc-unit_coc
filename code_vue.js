@@ -40,6 +40,7 @@ const rootApp = createApp({
         ['知識', { id: id++, value: null }],
       ]),
     });
+    watch(is6th, updateDefStats);
 
     const exStats = ref({ params: [], stats: [] });
     function addRow(key)    { exStats.value[key].push({ id: id++, title: null, value: null }); }
@@ -100,6 +101,7 @@ const rootApp = createApp({
           // 正気度ロール
           } else if (chatTarget == 'SANc') {
             if (!defStats.value.stats.get('SAN').value) return;
+            if ( defStats.value.stats.get('SAN').del) return;
             rawDicArr.push({ id: id++, type: 'elseRoll', name: '正気度ロール', value: '1d100<={SAN}' });
 
 
@@ -363,6 +365,32 @@ const rootApp = createApp({
       });
     }
 
+    function clear () {
+      document.getElementById('name').value = null;
+      document.getElementById('stats').value = null;
+      document.getElementById('skills').value = null;
+
+      updateDefStats();
+      updateSkillList();
+    }
+
+
+
+    function getChatpalette () {
+      return refChatList.value
+        .filter(dic => !dic.del)
+        .map(dic => `${dic.secret?'s':''}${dic.times}${dic.text}`)
+        .join('\n');
+    }
+
+    function copy2clipboard(e, text) {
+      const element = e.currentTarget;
+      const defText = element.innerText;
+      navigator.clipboard.writeText(text);
+      element.innerText = 'Copied!';
+      setTimeout(() => element.innerText=defText, 1000);
+    }
+
 
     // -----------------
     //    to switch
@@ -440,6 +468,10 @@ HP 12  MP 30  SAN 10  DB +1D4
 
       updateDefStats,
       updateSkillList,
+      clear,
+
+      getChatpalette,
+      copy2clipboard,
 
       dragIndex,
       dragTarget,

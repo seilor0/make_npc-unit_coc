@@ -62,12 +62,12 @@ const dragEvent = new Map([
 // -------------------------
 //         初期処理
 // -------------------------
-initProcess();
-async function initProcess() {
-  const json = await fetch('./setting.json').then(res=>res.json());
-  settingDic = structuredClone(json.setting);
-  return;
-}
+// initProcess();
+// async function initProcess() {
+//   const json = await fetch('./setting.json').then(res=>res.json());
+//   settingDic = structuredClone(json.setting);
+//   return;
+// }
 
 
 // -------------------------
@@ -116,155 +116,155 @@ document.getElementById('useful').addEventListener('click', () => {
   li3.appendChild(document.createTextNode('該当の欄をクリック'));
 });
 
-// チャパレ設定
-document.getElementById('diceSetting').addEventListener('click', () => {
-  const modal = document.getElementById('modal');
-  const body = modal.querySelector('section');
+// // チャパレ設定
+// document.getElementById('diceSetting').addEventListener('click', () => {
+//   const modal = document.getElementById('modal');
+//   const body = modal.querySelector('section');
 
-  modal.querySelector('h2').textContent = 'チャパレ設定';
+//   modal.querySelector('h2').textContent = 'チャパレ設定';
 
-  body.className = 'settingWrapper';
-  body.style.setProperty('width', '22rem');
+//   body.className = 'settingWrapper';
+//   body.style.setProperty('width', '22rem');
 
-  addElement(body, 'span', [], 'システム');
-  const systemInput = createToggleBtn(body, !settingDic.is6th, {notChecked:'CoC6th', checked:'CoC7th'});
+//   addElement(body, 'span', [], 'システム');
+//   const systemInput = createToggleBtn(body, !settingDic.is6th, {notChecked:'CoC6th', checked:'CoC7th'});
 
-  addElement(body, 'span', [], '判定ダイス');
-  const diceSelect = addElement(body, 'select');
-  addElement(diceSelect, 'option', [], 'CC',    [['value','CC']]);
-  addElement(diceSelect, 'option', [], 'CCB',   [['value','CCB'],['selected', '']]);
-  addElement(diceSelect, 'option', [], '1d100', [['value','1d100']]);
+//   addElement(body, 'span', [], '判定ダイス');
+//   const diceSelect = addElement(body, 'select');
+//   addElement(diceSelect, 'option', [], 'CC',    [['value','CC']]);
+//   addElement(diceSelect, 'option', [], 'CCB',   [['value','CCB'],['selected', '']]);
+//   addElement(diceSelect, 'option', [], '1d100', [['value','1d100']]);
 
-  addElement(body, 'span', [], '形式');
-  const rollStyleSelect = addElement(body, 'select');
-  addElement(rollStyleSelect, 'option', [], 'CCB<=70 【...】',  [['value', '']]);
-  addElement(rollStyleSelect, 'option', [], 'sCCB<=70 【...】', [['value', 's']]);
-  addElement(rollStyleSelect, 'option', [], 'CCB 【...】@70',   [['value', '@'], ['selected','']]);
+//   addElement(body, 'span', [], '形式');
+//   const rollStyleSelect = addElement(body, 'select');
+//   addElement(rollStyleSelect, 'option', [], 'CCB<=70 【...】',  [['value', '']]);
+//   addElement(rollStyleSelect, 'option', [], 'sCCB<=70 【...】', [['value', 's']]);
+//   addElement(rollStyleSelect, 'option', [], 'CCB 【...】@70',   [['value', '@'], ['selected','']]);
 
-  addElement(body, 'span');
-  const innerWrapper = addElement(body, 'div', ['settingWrapper'], null, [['style', 'margin: 0;column-gap: 0.5rem;']]);
+//   addElement(body, 'span');
+//   const innerWrapper = addElement(body, 'div', ['settingWrapper'], null, [['style', 'margin: 0;column-gap: 0.5rem;']]);
 
-  addElement(innerWrapper, 'span', [], '単体ダイス');
-  const sDiceInput = createToggleBtn(innerWrapper, settingDic.secretSingleDice, {notChecked:'オープン', checked:'シークレット'});
+//   addElement(innerWrapper, 'span', [], '単体ダイス');
+//   const sDiceInput = createToggleBtn(innerWrapper, settingDic.secretSingleDice, {notChecked:'オープン', checked:'シークレット'});
 
-  addElement(innerWrapper, 'span', [], 'choice');
-  const sChoiceInput = createToggleBtn(innerWrapper, settingDic.secretChoice, {notChecked:'オープン', checked:'シークレット'});
+//   addElement(innerWrapper, 'span', [], 'choice');
+//   const sChoiceInput = createToggleBtn(innerWrapper, settingDic.secretChoice, {notChecked:'オープン', checked:'シークレット'});
 
 
-  // --------------------------
-  //       Event Listener
-  // --------------------------
-  systemInput.addEventListener('change', (e)=>settingDic.is6th = !e.currentTarget.checked);
-  diceSelect.addEventListener('change', (e)=>{
-    settingDic.dice = e.currentTarget.value;
-    rollStyleSelect.children[0].textContent = e.currentTarget.value+'<=70 【...】';
-    rollStyleSelect.children[1].textContent = 's'+e.currentTarget.value+'<=70 【...】';
-    rollStyleSelect.children[2].textContent = e.currentTarget.value+' 【...】@70';
-  });
-  rollStyleSelect.addEventListener('change', (e)=>settingDic.rollStyle = e.currentTarget.value);
-  sDiceInput.addEventListener('change', (e)=>settingDic.secretSingleDice = e.currentTarget.checked);
-  sChoiceInput.addEventListener('change', (e)=>settingDic.secretChoice = e.currentTarget.checked);
+//   // --------------------------
+//   //       Event Listener
+//   // --------------------------
+//   // systemInput.addEventListener('change', (e)=>settingDic.is6th = !e.currentTarget.checked);
+//   // diceSelect.addEventListener('change', (e)=>{
+//   //   settingDic.dice = e.currentTarget.value;
+//   //   rollStyleSelect.children[0].textContent = e.currentTarget.value+'<=70 【...】';
+//   //   rollStyleSelect.children[1].textContent = 's'+e.currentTarget.value+'<=70 【...】';
+//   //   rollStyleSelect.children[2].textContent = e.currentTarget.value+' 【...】@70';
+//   // });
+//   // rollStyleSelect.addEventListener('change', (e)=>settingDic.rollStyle = e.currentTarget.value);
+//   // sDiceInput.addEventListener('change', (e)=>settingDic.secretSingleDice = e.currentTarget.checked);
+//   // sChoiceInput.addEventListener('change', (e)=>settingDic.secretChoice = e.currentTarget.checked);
 
-  systemInput.addEventListener('change', updateValueTables);
-  systemInput.addEventListener('change', createChatList);
+//   // systemInput.addEventListener('change', updateValueTables);
+//   // systemInput.addEventListener('change', createChatList);
 
-  diceSelect.addEventListener     ('change', updateChat);
-  rollStyleSelect.addEventListener('change', updateChat);
+//   // diceSelect.addEventListener     ('change', updateChat);
+//   // rollStyleSelect.addEventListener('change', updateChat);
 
-  sDiceInput.addEventListener  ('change', updateChat);
-  sChoiceInput.addEventListener('change', updateChat);
-});
+//   // sDiceInput.addEventListener  ('change', updateChat);
+//   // sChoiceInput.addEventListener('change', updateChat);
+// });
 
 
 // コマ設定
-document.getElementById('unitSetting').addEventListener('click', () => {
-  const modal = document.getElementById('modal');
-  const body = modal.querySelector('section');
+// document.getElementById('unitSetting').addEventListener('click', () => {
+//   const modal = document.getElementById('modal');
+//   const body = modal.querySelector('section');
 
-  modal.querySelector('h2').textContent = 'キャラコマ設定';
+//   modal.querySelector('h2').textContent = 'キャラコマ設定';
 
-  body.style.setProperty('max-width', '22rem');
+//   body.style.setProperty('max-width', '22rem');
 
-  const div1 = addElement(body, 'div', ['settingWrapper']);
+//   const div1 = addElement(body, 'div', ['settingWrapper']);
 
-  addElement(div1, 'span', [], 'ステータス');
-  const secretToggleBtn = createToggleBtn(div1, settingDic.secretUnit, {notChecked:'公開', checked:'秘匿'});
+//   addElement(div1, 'span', [], 'ステータス');
+//   const secretToggleBtn = createToggleBtn(div1, settingDic.secretUnit, {notChecked:'公開', checked:'秘匿'});
 
-  addElement(div1, 'span', [], '発言アイコン');
-  const invisibleToggleBtn = createToggleBtn(div1, settingDic.invisibleUnit, {notChecked:'表示', checked:'非表示'});
+//   addElement(div1, 'span', [], '発言アイコン');
+//   const invisibleToggleBtn = createToggleBtn(div1, settingDic.invisibleUnit, {notChecked:'表示', checked:'非表示'});
 
-  addElement(div1, 'span', [], 'コマ一覧');
-  const hideToggleBtn = createToggleBtn(div1, settingDic.hideUnit, {notChecked:'表示', checked:'非表示'});
-
-  
-  addElement(body, 'hr');
-  const div2 = addElement(body, 'div', ['settingWrapper']);
-
-  addElement(div2, 'span', [], '発言カラー');
-  const colorWrapper = addElement(div2, 'div', [], null, 
-    [['style','display: grid;grid-template-columns: auto auto 1fr;gap: 0.5rem;align-items: center;']]);
-
-  const colorEl = addElement(colorWrapper, 'input', [], null, [['type','color']]);
-  colorEl.value = settingDic.color;
-  const colorTextEl = addElement(colorWrapper, 'input', [], null, 
-    [['type','text'],['placeholder','#888888'],['style','background-color: transparent;height: stretch;width: 7ch;']]);
-  if (settingDic.color!='#888888') colorTextEl.value = settingDic.color;
-
-  const name = nameEl.value.trim().split('\n')[0].trim();
-  const namePreviewEl = addElement(colorWrapper, 'p', ['ccfoliaName'], name || '探索者名');
-  namePreviewEl.style.setProperty('color', settingDic.color);
-
-  addElement(div2, 'span', [], 'コマサイズ');
-  const unitSizeWrapper = addElement(div2, 'div', [], null, [['style','display: flex;gap: 0.5rem;']]);
-  const unitSizeEl = addElement(unitSizeWrapper, 'input', [], null, 
-    [['type','range'], ['min',1],['max',30],['value',settingDic.unitSize],['style','flex-grow: 1']]);
-  const unitSizeNumEl = addElement(unitSizeWrapper, 'input', [], null, 
-    [['type','number'],['min',1],['value',settingDic.unitSize]]);
-
-  addElement(div2, 'span', [], '差分<span style="font-size: smaller;"> (ラベル)</span>');
-  const diffEl = addElement(div2, 'textarea');
+//   addElement(div1, 'span', [], 'コマ一覧');
+//   const hideToggleBtn = createToggleBtn(div1, settingDic.hideUnit, {notChecked:'表示', checked:'非表示'});
 
   
-  // --------------------------
-  //       Event Listener
-  // --------------------------
+//   addElement(body, 'hr');
+//   const div2 = addElement(body, 'div', ['settingWrapper']);
 
-  secretToggleBtn.addEventListener   ('change', (e)=>settingDic.secretUnit    = e.currentTarget.checked);
-  invisibleToggleBtn.addEventListener('change', (e)=>settingDic.invisibleUnit = e.currentTarget.checked);
-  hideToggleBtn.addEventListener     ('change', (e)=>settingDic.hideUnit      = e.currentTarget.checked);
+//   addElement(div2, 'span', [], '発言カラー');
+//   const colorWrapper = addElement(div2, 'div', [], null, 
+//     [['style','display: grid;grid-template-columns: auto auto 1fr;gap: 0.5rem;align-items: center;']]);
 
-  // 発言色
-  colorEl.addEventListener('input', (e) => {
-    colorTextEl.value = e.currentTarget.value;
-    namePreviewEl.style.color = e.currentTarget.value;
-  });
-  colorTextEl.addEventListener('input', (e) => {
-    if (!/^#?[0-9a-fA-F]{6}$/.test(e.currentTarget.value)) return;
-    colorEl.value = e.currentTarget.value.padStart(7, "#");
-    namePreviewEl.style.color = e.currentTarget.value.padStart(7, "#");
-  });
-  colorEl.addEventListener('change', (e)=>settingDic.color = e.currentTarget.value);
-  colorTextEl.addEventListener('change', (e) => {
-    if (!/^#?[0-9a-fA-F]{6}$/.test(e.currentTarget.value)) return;
-    settingDic.color = e.currentTarget.value.padStart(7, "#");
-  });
+//   const colorEl = addElement(colorWrapper, 'input', [], null, [['type','color']]);
+//   colorEl.value = settingDic.color;
+//   const colorTextEl = addElement(colorWrapper, 'input', [], null, 
+//     [['type','text'],['placeholder','#888888'],['style','background-color: transparent;height: stretch;width: 7ch;']]);
+//   if (settingDic.color!='#888888') colorTextEl.value = settingDic.color;
 
-  // コマサイズ
-  unitSizeEl.addEventListener('input', (e) => {
-    unitSizeNumEl.value = e.currentTarget.value;
-    settingDic.unitSize = e.currentTarget.value;
-  });
-  unitSizeNumEl.addEventListener('input', (e) => {
-    unitSizeEl.value = e.currentTarget.value;
-    settingDic.unitSize = e.currentTarget.value;
-  });
+//   const name = nameEl.value.trim().split('\n')[0].trim();
+//   const namePreviewEl = addElement(colorWrapper, 'p', ['ccfoliaName'], name || '探索者名');
+//   namePreviewEl.style.setProperty('color', settingDic.color);
+
+//   addElement(div2, 'span', [], 'コマサイズ');
+//   const unitSizeWrapper = addElement(div2, 'div', [], null, [['style','display: flex;gap: 0.5rem;']]);
+//   const unitSizeEl = addElement(unitSizeWrapper, 'input', [], null, 
+//     [['type','range'], ['min',1],['max',30],['value',settingDic.unitSize],['style','flex-grow: 1']]);
+//   const unitSizeNumEl = addElement(unitSizeWrapper, 'input', [], null, 
+//     [['type','number'],['min',1],['value',settingDic.unitSize]]);
+
+//   addElement(div2, 'span', [], '差分<span style="font-size: smaller;"> (ラベル)</span>');
+//   const diffEl = addElement(div2, 'textarea');
+
   
-  // 差分
-  diffEl.addEventListener('change', (e) => {
-    settingDic.faces = e.currentTarget.value.split('\n').filter(Boolean).map(row=>(row.startsWith('@')?'':'@')+row);
-    if(document.querySelector('[name=chatTarget] [value=diff]').checked) createChatList();
-  });
-});
+//   // --------------------------
+//   //       Event Listener
+//   // --------------------------
+
+//   // secretToggleBtn.addEventListener   ('change', (e)=>settingDic.secretUnit    = e.currentTarget.checked);
+//   // invisibleToggleBtn.addEventListener('change', (e)=>settingDic.invisibleUnit = e.currentTarget.checked);
+//   // hideToggleBtn.addEventListener     ('change', (e)=>settingDic.hideUnit      = e.currentTarget.checked);
+
+//   // // 発言色
+//   // colorEl.addEventListener('input', (e) => {
+//   //   colorTextEl.value = e.currentTarget.value;
+//   //   namePreviewEl.style.color = e.currentTarget.value;
+//   // });
+//   // colorTextEl.addEventListener('input', (e) => {
+//   //   if (!/^#?[0-9a-fA-F]{6}$/.test(e.currentTarget.value)) return;
+//   //   colorEl.value = e.currentTarget.value.padStart(7, "#");
+//   //   namePreviewEl.style.color = e.currentTarget.value.padStart(7, "#");
+//   // });
+//   // colorEl.addEventListener('change', (e)=>settingDic.color = e.currentTarget.value);
+//   // colorTextEl.addEventListener('change', (e) => {
+//   //   if (!/^#?[0-9a-fA-F]{6}$/.test(e.currentTarget.value)) return;
+//   //   settingDic.color = e.currentTarget.value.padStart(7, "#");
+//   // });
+
+//   // // コマサイズ
+//   // unitSizeEl.addEventListener('input', (e) => {
+//   //   unitSizeNumEl.value = e.currentTarget.value;
+//   //   settingDic.unitSize = e.currentTarget.value;
+//   // });
+//   // unitSizeNumEl.addEventListener('input', (e) => {
+//   //   unitSizeEl.value = e.currentTarget.value;
+//   //   settingDic.unitSize = e.currentTarget.value;
+//   // });
+  
+//   // // 差分
+//   // diffEl.addEventListener('change', (e) => {
+//   //   settingDic.faces = e.currentTarget.value.split('\n').filter(Boolean).map(row=>(row.startsWith('@')?'':'@')+row);
+//   //   if(document.querySelector('[name=chatTarget] [value=diff]').checked) createChatList();
+//   // });
+// });
 
 
 // Import CCFOLIA unit Btn
@@ -277,10 +277,10 @@ document.getElementById('importUnit').addEventListener('click', () => {
 });
 
 
-statsEl.addEventListener ('input',  updateValueTables);
-statsEl.addEventListener ('change', createChatList);
-skillsEl.addEventListener('input',  createSkillList);
-skillsEl.addEventListener('change', createChatList);
+// statsEl.addEventListener ('input',  updateValueTables);
+// statsEl.addEventListener ('change', createChatList);
+// skillsEl.addEventListener('input',  createSkillList);
+// skillsEl.addEventListener('change', createChatList);
 
 // clear
 document.getElementById('clear').addEventListener('click', clearTextarea);
@@ -290,46 +290,46 @@ document.getElementById('clear').addEventListener('click', clearTextarea);
 // document.getElementById('delChar').addEventListener('change', createSkillList);
 // document.getElementById('delChar').addEventListener('change', createChatList);
 
-// チャットターゲット
-document.querySelectorAll('[name=chatTarget] input[type=checkbox]').forEach(input => input.addEventListener('change', createChatList));
+// // チャットターゲット
+// document.querySelectorAll('[name=chatTarget] input[type=checkbox]').forEach(input => input.addEventListener('change', createChatList));
 
-// テーブル：✔切り替え
-[...paramsTable.children].forEach(row => row.addEventListener('click', (e) => {
-  toggleSecretCheckbox(e);
-  const i = chatList.findIndex(el=>el.name.startsWith(e.currentTarget.children[1].innerText));
-  if (i>-1)  batchMove(chatTable.children[i],'↓↓').checked = batchMove(e.currentTarget,'↓↓').checked;
-}));
+// // テーブル：✔切り替え
+// [...paramsTable.children].forEach(row => row.addEventListener('click', (e) => {
+//   toggleSecretCheckbox(e);
+//   const i = chatList.findIndex(el=>el.name.startsWith(e.currentTarget.children[1].innerText));
+//   if (i>-1)  batchMove(chatTable.children[i],'↓↓').checked = batchMove(e.currentTarget,'↓↓').checked;
+// }));
 
-[...statsTable.children].forEach(row => row.addEventListener('click', (e) => {
-  toggleSecretCheckbox(e);
-  if (e.currentTarget.children[1].innerText=='SAN') {
-    const i = chatList.findIndex(el=>String(el.value).startsWith('1d100<={SAN}'));
-    if (i>-1)  batchMove(chatTable.children[i],'↓↓').checked = batchMove(e.currentTarget,'↓↓').checked;
-  }
-}));
+// [...statsTable.children].forEach(row => row.addEventListener('click', (e) => {
+//   toggleSecretCheckbox(e);
+//   if (e.currentTarget.children[1].innerText=='SAN') {
+//     const i = chatList.findIndex(el=>String(el.value).startsWith('1d100<={SAN}'));
+//     if (i>-1)  batchMove(chatTable.children[i],'↓↓').checked = batchMove(e.currentTarget,'↓↓').checked;
+//   }
+// }));
 
-// パラメータ・ステータス追加
-document.querySelectorAll('button:has(>.icon-plus)').forEach(button => 
-  button.addEventListener('click', (e)=> {
-    const tbody = e.currentTarget.closest('table').querySelector('tbody');
-    const row = addRow(tbody, 3, 1, true);
-    row.draggable = true;
-    dragEvent.forEach((value,key) => {
-      if (typeof(value)=='function') row.addEventListener(key,value);
-      else value.forEach(val=>row.addEventListener(key,val));
-    });
-  })
-);
-document.querySelectorAll('button:has(>.icon-minus)').forEach(button=>
-  button.addEventListener('click', (e)=> {
-    const target = e.currentTarget.closest('table').querySelector('tbody > :last-child');
-    if (target.draggable) target.remove();
-  })
-);
+// // パラメータ・ステータス追加
+// document.querySelectorAll('button:has(>.icon-plus)').forEach(button => 
+//   button.addEventListener('click', (e)=> {
+//     const tbody = e.currentTarget.closest('table').querySelector('tbody');
+//     const row = addRow(tbody, 3, 1, true);
+//     row.draggable = true;
+//     dragEvent.forEach((value,key) => {
+//       if (typeof(value)=='function') row.addEventListener(key,value);
+//       else value.forEach(val=>row.addEventListener(key,val));
+//     });
+//   })
+// );
+// document.querySelectorAll('button:has(>.icon-minus)').forEach(button=>
+//   button.addEventListener('click', (e)=> {
+//     const target = e.currentTarget.closest('table').querySelector('tbody > :last-child');
+//     if (target.draggable) target.remove();
+//   })
+// );
 
 // copy to Clipboard
 document.getElementById('exUnit').addEventListener('click', exportUnit);
-document.getElementById('exChat').addEventListener('click', (e)=>copy2clipboard(e.currentTarget, getChatpalette()));
+// document.getElementById('exChat').addEventListener('click', (e)=>copy2clipboard(e.currentTarget, getChatpalette()));
 
 
 // ----------------------------
@@ -401,167 +401,167 @@ function updateValueTables () {
   return;
 }
 
-// /**
-//  * skillsEL --> skill list --> skill table
-//  */
-// function createSkillList () {
-//   console.log('❚ createSkillList');
-//   skillList.splice(0);
-//   // skillList = [];
+/**
+ * skillsEL --> skill list --> skill table
+ */
+function createSkillList () {
+  console.log('❚ createSkillList');
+  skillList.splice(0);
+  // skillList = [];
 
-//   // -----------------------
-//   // skillsELの値を取得・整形
-//   // -----------------------
-//   const baseArr =  [
-//     [/　/g, ' '],
-//     [/[！-｝]/g, function(s){return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);}],
-//     [new RegExp(`[${document.getElementById('delChar').value}]`,'g'), ''],
-//     [/_/g, ' '],
-//   ]
-//   .reduce((acc,cur) => acc.replaceAll(cur[0],cur[1]), skillsEl.value)
-//   .split(/\n|%/)
-//   .filter(Boolean);
+  // -----------------------
+  // skillsELの値を取得・整形
+  // -----------------------
+  const baseArr =  [
+    [/　/g, ' '],
+    [/[！-｝]/g, function(s){return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);}],
+    [new RegExp(`[${document.getElementById('delChar').value}]`,'g'), ''],
+    [/_/g, ' '],
+  ]
+  .reduce((acc,cur) => acc.replaceAll(cur[0],cur[1]), skillsEl.value)
+  .split(/\n|%/)
+  .filter(Boolean);
   
-//   // -----------------------
-//   //     skillList 作成
-//   // -----------------------
-//   // (?(?:{?DB}?|\d+D\d+|\d+|{.+?}))?
-//   const b = '\\(?(?:\\{?DB\\}?|\\d+D\\d+|\\d+|\\{.+?\\})\\)?';  // db,1d3,2,{...}
-//   const dicePattern = `${b}(?:[-+*/]${b})*`;
+  // -----------------------
+  //     skillList 作成
+  // -----------------------
+  // (?(?:{?DB}?|\d+D\d+|\d+|{.+?}))?
+  const b = '\\(?(?:\\{?DB\\}?|\\d+D\\d+|\\d+|\\{.+?\\})\\)?';  // db,1d3,2,{...}
+  const dicePattern = `${b}(?:[-+*/]${b})*`;
 
-//   baseArr.forEach(base => {
-//     const dic = {type:null, name:'', value:null, times:null, noname:false};
-//     // let dic, times;
+  baseArr.forEach(base => {
+    const dic = {type:null, name:'', value:null, times:null, noname:false};
+    // let dic, times;
 
-//     // 複数回ロール
-//     if (/^(?:x|rep|repeat)\d+/.test(base)) {
-//       times = parseInt(base.match(/^(?:x|rep|repeat)(\d+)/i)[1]);
-//       base = base.replace(/(?:x|rep|repeat)\d+ */i,'');
-//       dic.times = times;
-//     }
+    // 複数回ロール
+    if (/^(?:x|rep|repeat)\d+/.test(base)) {
+      times = parseInt(base.match(/^(?:x|rep|repeat)(\d+)/i)[1]);
+      base = base.replace(/(?:x|rep|repeat)\d+ */i,'');
+      dic.times = times;
+    }
     
-//     // ---------------------
+    // ---------------------
     
-//     // command
-//     if (/^@|^:|^\/(?:scene|save|load|pdf|var|play|roll-table|omikuji)/i.test(base)) {
-//       dic.type = 'line';
-//       dic.value = base;
-//       // dic = {type:'line', name:'', value:base};
+    // command
+    if (/^@|^:|^\/(?:scene|save|load|pdf|var|play|roll-table|omikuji)/i.test(base)) {
+      dic.type = 'line';
+      dic.value = base;
+      // dic = {type:'line', name:'', value:base};
 
-//     // choice
-//     } else if (base.indexOf('choice') > -1) {
-//       const choice = base.match(/choice\d*(?:\[.+\]|\(.+\)| .+)/i)?.[0];
-//       if (!choice) return;
-//       dic.type = 'choice';
-//       dic.name = base.replace(choice,'');
-//       dic.value = choice;
-//       // dic = {type:'choice', name:base.replace(choice,''), value:choice};
+    // choice
+    } else if (base.indexOf('choice') > -1) {
+      const choice = base.match(/choice\d*(?:\[.+\]|\(.+\)| .+)/i)?.[0];
+      if (!choice) return;
+      dic.type = 'choice';
+      dic.name = base.replace(choice,'');
+      dic.value = choice;
+      // dic = {type:'choice', name:base.replace(choice,''), value:choice};
 
-//     } else if (base.indexOf('チョイス') > -1) {
-//       const arr = base.match(/チョイス(\d*) *(.+)/i);
-//       if (!arr) return;
-//       const [choice, cTimes, option] = arr.slice(0,3);
-//       const value = `choice${cTimes}[${option.split(/[,、， ]/).filter(Boolean).join(',')}]`;
-//       dic.type = 'choice';
-//       dic.name = base.replace(choice,'');
-//       dic.value = value;
-//       // dic = {type:'choice', name:base.replace(choice,''), value:value};
+    } else if (base.indexOf('チョイス') > -1) {
+      const arr = base.match(/チョイス(\d*) *(.+)/i);
+      if (!arr) return;
+      const [choice, cTimes, option] = arr.slice(0,3);
+      const value = `choice${cTimes}[${option.split(/[,、， ]/).filter(Boolean).join(',')}]`;
+      dic.type = 'choice';
+      dic.name = base.replace(choice,'');
+      dic.value = value;
+      // dic = {type:'choice', name:base.replace(choice,''), value:value};
 
-//     // 組み合わせロール
-//     } else if (/CBR/i.test(base)) {
-//       const [value,value1,value2] = base.match(/CBRB?\D*(\d+)\D+(\d+)\)?/i).slice(0,3);
-//       dic.type = 'elseRoll';
-//       dic.name = base.replace(value,'');
-//       dic.value = `CBR(${value1},${value2})`;
-//       // dic = {type:'elseRoll', name:base.replace(value,''), value:`CBR(${value1},${value2})`};
+    // 組み合わせロール
+    } else if (/CBR/i.test(base)) {
+      const [value,value1,value2] = base.match(/CBRB?\D*(\d+)\D+(\d+)\)?/i).slice(0,3);
+      dic.type = 'elseRoll';
+      dic.name = base.replace(value,'');
+      dic.value = `CBR(${value1},${value2})`;
+      // dic = {type:'elseRoll', name:base.replace(value,''), value:`CBR(${value1},${value2})`};
       
-//     // 対抗ロール
-//     } else if (/RES/i.test(base)) {
-//       const [value,value1,value2] = base.match(/RESB?\D*(\d+)\D+(\d+)\)?/i).slice(0,3);
-//       dic.type='elseRoll';
-//       dic.name = base.replace(value,'');
-//       dic.value - `RES(${value1}-${value2})`;
-//       // dic = {type:'elseRoll', name:base.replace(value,''), value:`RES(${value1}-${value2})`};
+    // 対抗ロール
+    } else if (/RES/i.test(base)) {
+      const [value,value1,value2] = base.match(/RESB?\D*(\d+)\D+(\d+)\)?/i).slice(0,3);
+      dic.type='elseRoll';
+      dic.name = base.replace(value,'');
+      dic.value - `RES(${value1}-${value2})`;
+      // dic = {type:'elseRoll', name:base.replace(value,''), value:`RES(${value1}-${value2})`};
 
-//     // CCB<=70 skill
-//     } else if (/(?:1d100|CCB?)<=/i.test(base)) {
-//       const arr = base.match(new RegExp(`<=(${dicePattern}) *(.*)`,'i'));
-//       dic.type = 'roll';
-//       dic.name = arr[2];
-//       dic.value = arr[1];
-//       // dic = {type:'roll', name:arr[2], value:arr[1]};
+    // CCB<=70 skill
+    } else if (/(?:1d100|CCB?)<=/i.test(base)) {
+      const arr = base.match(new RegExp(`<=(${dicePattern}) *(.*)`,'i'));
+      dic.type = 'roll';
+      dic.name = arr[2];
+      dic.value = arr[1];
+      // dic = {type:'roll', name:arr[2], value:arr[1]};
       
-//     // CCB skill @70
-//     } else if (/(?:1d100|CCB?).*@\d+$/i.test(base)) {
-//       const arr = base.match(/(?:1d100|CCB?) *(.*) *@(\d+)$/i);
-//       dic.type = 'roll';
-//       dic.name = arr[1];
-//       dic.value = arr[2];
-//       // dic = {type:'roll', name:arr[1], value:arr[2]};
+    // CCB skill @70
+    } else if (/(?:1d100|CCB?).*@\d+$/i.test(base)) {
+      const arr = base.match(/(?:1d100|CCB?) *(.*) *@(\d+)$/i);
+      dic.type = 'roll';
+      dic.name = arr[1];
+      dic.value = arr[2];
+      // dic = {type:'roll', name:arr[1], value:arr[2]};
 
-//     // 1d3
-//     } else if (/\dD\d/i.test(base)) {
-//       let value = base.match(new RegExp(dicePattern,'i'))[0];
-//       const name = base.replace(value,'');
-//       value = value.replace(/\/1$/i,'').replace(/\{?db\}?/gi,'{DB}');
-//       dic.type = 'dice';
-//       dic.name = name;
-//       dic.value = value;
-//       // dic = {type:'dice', name:name, value:value};
+    // 1d3
+    } else if (/\dD\d/i.test(base)) {
+      let value = base.match(new RegExp(dicePattern,'i'))[0];
+      const name = base.replace(value,'');
+      value = value.replace(/\/1$/i,'').replace(/\{?db\}?/gi,'{DB}');
+      dic.type = 'dice';
+      dic.name = name;
+      dic.value = value;
+      // dic = {type:'dice', name:name, value:value};
 
-//     // skill 70
-//     } else {
-//       const arr = base.match(new RegExp(`(.*?)(${dicePattern})\\D*$`,'i'));
-//       if (!arr) {
-//         console.log(`Not add to chat-palette : ${base}`);
-//         return;
-//       }
-//       dic.type = 'roll';
-//       dic.name = arr[1];
-//       dic.value = arr[2];
-//       // dic = {type:'roll', name:arr[1], value:arr[2]};
-//     }
+    // skill 70
+    } else {
+      const arr = base.match(new RegExp(`(.*?)(${dicePattern})\\D*$`,'i'));
+      if (!arr) {
+        console.log(`Not add to chat-palette : ${base}`);
+        return;
+      }
+      dic.type = 'roll';
+      dic.name = arr[1];
+      dic.value = arr[2];
+      // dic = {type:'roll', name:arr[1], value:arr[2]};
+    }
 
-//     // if(times)  dic.times = times;
-//     dic.name = dic.name.replace(/[()]/g, function(s){return String.fromCharCode(s.charCodeAt(0) + 0xFEE0);}).trim();
-//     skillList.push(dic);
-//   });
+    // if(times)  dic.times = times;
+    dic.name = dic.name.replace(/[()]/g, function(s){return String.fromCharCode(s.charCodeAt(0) + 0xFEE0);}).trim();
+    skillList.push(dic);
+  });
 
-//   // -----------------------
-//   //    skillTableの更新
-//   // -----------------------
-//   skillTable.innerHTML='';
-//   if (!skillList.length) {
-//     for (let i=0; i<6; i++) {
-//       const row = addRow(skillTable, 2, 0);
-//       row.style.height = '1.5rem';
-//     }
-//     return;
-//   }
-//   skillList.forEach(dic => {
-//     const row = addRow(skillTable, 2, 0);
-//     row.children[0].innerText = (dic.times ? `x${dic.times} ` : '') + dic.name;
-//     row.children[1].innerText = dic.value;
+  // -----------------------
+  //    skillTableの更新
+  // -----------------------
+  skillTable.innerHTML='';
+  if (!skillList.length) {
+    for (let i=0; i<6; i++) {
+      const row = addRow(skillTable, 2, 0);
+      row.style.height = '1.5rem';
+    }
+    return;
+  }
+  skillList.forEach(dic => {
+    const row = addRow(skillTable, 2, 0);
+    row.children[0].innerText = (dic.times ? `x${dic.times} ` : '') + dic.name;
+    row.children[1].innerText = dic.value;
 
-//     // 技能名をクリックでチャット欄の技能名表示を切り替える
-//     // skillListとchatListで参照しているdicが同じなため、skillListだけ切り替えればOK
-//     row.children[0].addEventListener('click', (e) => {
-//       const i = e.currentTarget.parentElement.sectionRowIndex;
-//       if (e.currentTarget.style.color) {
-//         e.currentTarget.style.color = null;
-//         e.currentTarget.style.textDecoration = null;
-//         skillList[i].noname = false;
-//       } else {
-//         e.currentTarget.style.color = 'rgb(0 0 0 /0.33)';
-//         e.currentTarget.style.textDecoration = 'line-through';
-//         skillList[i].noname = true;
-//       }
-//       updateChat();
-//     });
-//   });
+    // 技能名をクリックでチャット欄の技能名表示を切り替える
+    // skillListとchatListで参照しているdicが同じなため、skillListだけ切り替えればOK
+    row.children[0].addEventListener('click', (e) => {
+      const i = e.currentTarget.parentElement.sectionRowIndex;
+      if (e.currentTarget.style.color) {
+        e.currentTarget.style.color = null;
+        e.currentTarget.style.textDecoration = null;
+        skillList[i].noname = false;
+      } else {
+        e.currentTarget.style.color = 'rgb(0 0 0 /0.33)';
+        e.currentTarget.style.textDecoration = 'line-through';
+        skillList[i].noname = true;
+      }
+      updateChat();
+    });
+  });
 
-//   return;
-// }
+  return;
+}
 
 /**
  * status table, skill list --> chat list --> chat table
