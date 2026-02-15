@@ -141,8 +141,8 @@ hr {
 :is(main,dialog) li li::marker {content:'▹';}
 
 :is(main,dialog) ul {
-  padding-inline-start: 0.625rem;
-  margin-block: 0.5rem;
+  padding-inline-start: 0.9em;
+  margin-block: 0.5em;
   li {
     padding-inline-start: 0.5ch;
     &.ok::marker {content:'✓';}
@@ -151,6 +151,15 @@ hr {
       color: rgb(205, 16, 35);
     }
   }
+}
+
+div.graybox {
+  background-color: #e6e6e6;
+  padding: 0.5em 0.75em;
+  border-radius: 0.5em;
+  margin: 0.5em 0.25em;
+  font-size: calc(1rem - 1px);
+
 }
 
 /* --------------------------- */
@@ -198,22 +207,8 @@ button.export {
   font-weight: 700;
   height: var(--size);
   width: var(--size);
-  /* cursor: pointer; */
 }
 
-/* button#clear {
-  color: #555;
-  background-color: transparent;
-  font-weight: 500;
-  border-radius: 0.25rem;
-  border: 1px solid #555;
-  cursor: pointer;
-
-  &:active {
-    color: #eee;
-    background-color: rgba(42, 99, 68, 0.9);
-  }
-} */
 
 .aside-button {
   color: white;
@@ -226,14 +221,16 @@ button.export {
 
   height: 2.25rem;
   width: stretch;
-  /* cursor: pointer; */
   font-size: calc(1rem - 1px);
   box-shadow: -4px -4px 8px #fff, 2px 2px 4px rgb(0 0 0 / 20%);
   margin-block: 1rem;
   padding-inline: 1.125rem;
 
-  .material-symbols-outlined {margin-inline-start: -0.3rem;}
   &:hover {text-decoration: underline;}
+  .material-symbols-outlined {
+    margin-inline-start: -0.3rem;
+    text-decoration: none !important;
+  }
 }
 
 div.buttonWrap {

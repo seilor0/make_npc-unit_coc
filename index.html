@@ -15,10 +15,10 @@
       <!-- 左メニュー -->
       <aside>
         <h1>NPCコマ<br>作成ツール</h1>
-        <button id="how2use" popovertarget="modal" class="aside-button" style="background-color: lightsalmon;">
-          使い方
+        <button class="aside-button" command="show-modal" commandfor="modal-how2use" style="background-color: lightsalmon;">
+          このサイトについて
         </button>
-        <button id="useful" popovertarget="modal" class="aside-button" style="background-color: lightsalmon;">
+        <button class="aside-button" command="show-modal" commandfor="modal-useful" style="background-color: lightsalmon;">
           便利機能
         </button>
 
@@ -295,14 +295,67 @@ Call of Cthulhu is copyright ©1981, 2015, 2019 by Chaosium Inc. ;all rights res
 PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥルフ神話TRPG」</pre>
     </footer>
 
-    <dialog id="modal" popover="auto">
+    <dialog id="modal-how2use" closedby="any">
       <header>
-        <h2>Sample Modal Title</h2>
-        <button class="icon-frame" popovertarget="modal" popovertargetaction="hide">
+        <h2>このサイトについて</h2>
+        <button class="icon-frame" command="show-modal" commandfor="modal-how2use">
           <div class="icon icon-close"></div>
         </button>
       </header>
-      <section></section>
+      <section>
+        CoC6版 / 7版の、ココフォリア用の<br>
+        キャラコマを作れるサイトです。<br>
+        <br>
+        入力の手数を極力省くことを目的に作りました。
+      </section>
+    </dialog>
+
+    <dialog id="modal-useful" closedby="any">
+      <header>
+        <h2>便利機能</h2>
+        <button class="icon-frame" command="show-modal" commandfor="modal-useful">
+          <div class="icon icon-close"></div>
+        </button>
+      </header>
+      <section>
+        <span class="title">
+          リスト・チャパレの並び替え
+        </span>
+        <br>
+        <div>
+          ドラッグ & ドロップで、右側のリストを<br>
+          並び替えることができます。
+          <div class="graybox">
+            対象：
+            <ul>
+              <li>技能</li>
+              <li>チャパレ</li>
+              <li>自分で追加したパラメータ ＆ ステータス</li>
+            </ul>
+          </div>
+        </div>
+
+        <hr>
+
+        <span class="title">
+          出力ON/OFF
+        </span>
+        <br>
+        <div>
+          パラメータやステータス、チャパレなどを、<br>
+          該当の行をクリックすることで<br>
+          チャパレやキャラコマに出力するか別個に設定ができます。<br>
+          <div class="graybox">
+            対象：
+            <ul>
+              <li>パラメータ</li>
+              <li>ステータス</li>
+              <li>技能名</li>
+              <li>チャパレ</li>
+            </ul>
+          </div>
+        </div>
+      </section>
     </dialog>
 
     <dialog id="modal-dice-setting" closedby="any">
