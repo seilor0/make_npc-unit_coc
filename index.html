@@ -22,18 +22,15 @@
           便利機能
         </button>
 
-        <button id="diceSetting" class="aside-button" 
-          command="show-modal" commandfor="modal-dice-setting">
+        <button class="aside-button" command="show-modal" commandfor="modal-dice-setting">
           <span class="material-symbols-outlined">settings</span>
           チャパレ設定
         </button>
-        <button id="unitSetting" class="aside-button" 
-          command="show-modal" commandfor="modal-unit-setting">
+        <button class="aside-button" command="show-modal" commandfor="modal-unit-setting">
           <span class="material-symbols-outlined">settings</span>
           コマ設定
         </button>
-        <button id="importUnit" class="aside-button" 
-          command="show-modal" commandfor="modal-import-unit">
+        <button class="aside-button" command="show-modal" commandfor="modal-import-unit">
           <span class="material-symbols-outlined">input</span>
           コマをインポート
         </button>
@@ -121,14 +118,14 @@
                   v-for="(param, index) in exStats.params" 
                   :key="param.id"
                   :draggable="true"
-                  :class="index === dragIndex && dragTarget===exStats.params ? 'dragging' : null"
+                  :class="index===dragIndex && dragTarget===exStats.params ? 'dragging' : null"
                   @dragstart="dragStart(index, exStats.params)"
                   @dragenter="dragEnter(index, exStats.params)"
                   @dragover.prevent
                   @dragend="dragEnd"
                 >
                   <td></td>
-                  <th><input type="text" v-model="param.title"/></th>
+                  <th><input type="text" v-model="param.label"/></th>
                   <td><input type="text" v-model="param.value"/></td>
                 </tr>
               </tbody>
@@ -161,7 +158,7 @@
                   @dragend="dragEnd"
                 >
                   <td></td>
-                  <th><input type="text" v-model="stat.title"/></th>
+                  <th><input type="text" v-model="stat.label"/></th>
                   <td><input type="text" v-model="stat.value"/></td>
                 </tr>
               </tbody>
@@ -237,7 +234,7 @@
 
           <div class="settingWrapper" name="chatTarget">
             <template v-for="data in chatTargets" :key="data.id">
-              <span>{{data.name}}</span>
+              <span>{{data.label}}</span>
               <label class="toggle-button">
                 <input type="checkbox" v-model="data.value"/>
                 <span class="slider"></span>
@@ -318,7 +315,7 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
       <section class="settingWrapper" style="width: 22rem;">
         <span>システム</span>
         <label class="toggle-button">
-          <input type="checkbox" v-model="is6th">
+          <input type="checkbox" v-model="settingDic.is6th">
           <span class="slider"></span>
           <span class="checked">CoC6th</span>
           <span class="not-checked">CoC7th</span>
@@ -413,16 +410,21 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
         </button>
       </header>
       <section>
-        <textarea style="width: 20rem;max-height: 20rem;"></textarea>
+        <textarea style="width: 20rem;max-height: 20rem;min-height: 6rem;" placeholder="コマをここに貼り付け" @change="importUnit"></textarea>
+        <label class="toggle-button" style="justify-content: flex-end;">
+          <input type="checkbox" v-model="settingDic.importUnitSetting">
+          <span class="checked">数値 & コマ設定をインポート</span>
+          <span class="not-checked">数値のみインポート</span>
+          <span class="slider"></span>
+        </label>
       </section>
     </dialog>
 
     <div class="buttonWrap">
-      <button id="exUnit" class="export" style="background-color: #418660;">
+      <button class="export" style="background-color: #418660;" @click="exportUnit">
         ココフォリアコマ出力
       </button>
-      <!-- <button id="exUnit" class="export">ココフォリアコマ出力</button> -->
-      <button class="export" @click="copy2clipboard($event, getChatpalette())">
+      <button class="export" @click="copy2clipboard($event.currentTarget, getChatpalette())">
         チャパレ出力
       </button>
     </div>

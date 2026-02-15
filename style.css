@@ -441,7 +441,7 @@ dialog {
   border: 1px solid darkgray;
   border-radius: 7px;
   scrollbar-color: #ccc transparent;
-  box-shadow: 0 0 50px 20px rgba(42, 70, 69, 0.2);
+  box-shadow: 0px 2px 17px 1px rgb(0 0 0 / 19%);
   overflow: hidden auto;
   padding: 0;
   
@@ -498,10 +498,10 @@ main table {
   th,td {
     font-weight: 500;
     padding: 0.25rem;
-    &:has(input[type="text"]) {padding:0;}
+    &:has(input[type="text"],input[type="number"]) {padding:0;}
   }
 
-  :is(th,td) input[type="text"] {
+  :is(th,td) input:is([type="text"],[type="number"]) {
     background-color: transparent;
     width: inherit;
     padding: 0.25rem;

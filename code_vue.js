@@ -4,17 +4,16 @@ const { createApp, ref, computed, watch, onMounted } = Vue;
 const rootApp = createApp({
   setup() {
     let id = 0;
-
-    const is6th = ref(true);
+    let initSettingDic = {};
 
     const settingDic = ref({});
 
     const chatTargets = ref([
-      { id: id++, name: '差分', value: true },
-      { id: id++, name: 'SANc', value: false },
-      { id: id++, name: '知識etc.', value: true },
-      { id: id++, name: '技能', value: true },
-      { id: id++, name: 'ステ*5', value: true },
+      { id: id++, label: '差分', value: true },
+      { id: id++, label: 'SANc', value: false },
+      { id: id++, label: '知識etc.', value: true },
+      { id: id++, label: '技能', value: true },
+      { id: id++, label: 'ステ*5', value: true },
     ]);
 
     const defStats = ref({
@@ -40,10 +39,10 @@ const rootApp = createApp({
         ['知識', { id: id++, value: null }],
       ]),
     });
-    watch(is6th, updateDefStats);
+    watch(() => settingDic.value.is6th, updateDefStats);
 
     const exStats = ref({ params: [], stats: [] });
-    function addRow(key)    { exStats.value[key].push({ id: id++, title: null, value: null }); }
+    function addRow(key)    { exStats.value[key].push({ id: id++, label: '', value: '' }); }
     function deleteRow(key) { exStats.value[key].pop(); }
 
 
@@ -88,7 +87,7 @@ const rootApp = createApp({
       const rawDicArr = [];
       chatTargets.value
         .filter(dic => dic.value)
-        .map(dic => dic.name)
+        .map(dic => dic.label)
         .forEach(chatTarget => {
 
           // 差分
@@ -109,7 +108,7 @@ const rootApp = createApp({
           } else if (chatTarget == '知識etc.') {
             defStats.value.else.forEach((dic, key) => {
               if (!dic.value) return;
-              if (key=='幸運' && !is6th.value && settingDic.value.rollStyle!='@') rawDicArr.push({ type: 'roll', name: '幸運', value: '{幸運}' });
+              if (key=='幸運' && !settingDic.value.is6th && settingDic.value.rollStyle!='@') rawDicArr.push({ type: 'roll', name: '幸運', value: '{幸運}' });
               else rawDicArr.push({ id: id++, type: 'roll', name: key, value: dic.value });
             });
 
@@ -126,8 +125,8 @@ const rootApp = createApp({
             defStats.value.params.forEach((dic, key) => {
               if (key=='DB') return;
               if (!dic.value || dic.del) return;
-              const end = is6th.value ? '*5' : '';
-              const value = settingDic.value.rollStyle=='@' ? dic.value * (is6th.value?5:1) : `{${key}}${end}`;
+              const end = settingDic.value.is6th ? '*5' : '';
+              const value = settingDic.value.rollStyle=='@' ? dic.value * (settingDic.value.is6th?5:1) : `{${key}}${end}`;
               rawDicArr.push({id: id++, type: 'roll', name: `${key}${end}`, value: value});
             });
           }
@@ -213,7 +212,7 @@ const rootApp = createApp({
         const sum = (
           defStats.value.params.get('STR').value +
           defStats.value.params.get('SIZ').value
-        ) / (is6th.value ? 1 : 5);
+        ) / (settingDic.value.is6th ? 1 : 5);
 
         if (sum <= 16) db = '-1d4';
         else if (sum > 16 && sum <= 24) db = 0;
@@ -232,25 +231,25 @@ const rootApp = createApp({
         defStats.value.params.get('SIZ').value
       ) {
         const sum = defStats.value.params.get('CON').value + defStats.value.params.get('SIZ').value;
-        hp = is6th.value ? Math.ceil(sum / 2) : Math.floor(sum / 10);
+        hp = settingDic.value.is6th ? Math.ceil(sum / 2) : Math.floor(sum / 10);
       }
 
       const mp = parseInt(text.match(/(?:MP|マジック・?ポイント)\D*(\d+)/i)?.[1]) ||
-        defStats.value.params.get('POW').value / (is6th.value ? 1 : 5) || null;
+        defStats.value.params.get('POW').value / (settingDic.value.is6th ? 1 : 5) || null;
 
       const san = parseInt(text.match(/(?:SAN値?|正気度)\D*(\d+)/i)?.[1]) ||
-        defStats.value.params.get('POW').value * (is6th.value ? 5 : 1) || null;
+        defStats.value.params.get('POW').value * (settingDic.value.is6th ? 5 : 1) || null;
 
 
       // アイデア・幸運・知識
       const idea = parseInt(text.match(/(?:ID[AE]|アイディ?ア)\D*(\d+)/i)?.[1]) ||
-        defStats.value.params.get('INT').value * (is6th.value ? 5 : 1) || null;
+        defStats.value.params.get('INT').value * (settingDic.value.is6th ? 5 : 1) || null;
 
       const luck = parseInt(text.match(/(?:LUCK|幸運)\D*(\d+)/i)?.[1]) ||
-        (is6th.value ? defStats.value.params.get('POW').value * 5 : null) || null;
+        (settingDic.value.is6th ? defStats.value.params.get('POW').value * 5 : null) || null;
 
       const know = parseInt(text.match(/(?:KNOW|知識)\D*(\d+)/i)?.[1]) ||
-        defStats.value.params.get('EDU').value * (is6th.value ? 5 : 1) || null;
+        defStats.value.params.get('EDU').value * (settingDic.value.is6th ? 5 : 1) || null;
 
       defStats.value.stats.get('HP').value = hp;
       defStats.value.stats.get('MP').value = mp;
@@ -360,7 +359,7 @@ const rootApp = createApp({
           dic.value = arr[2];
         }
 
-        dic.name = [['(', '（'], [')', '）']].reduce((acc, cur) => acc.replaceAll(cur[0], cur[1]), dic.name);
+        dic.name = [['(', '（'], [')', '）'], [':','：']].reduce((acc, cur) => acc.replaceAll(cur[0], cur[1]), dic.name);
         skillList.value.push(dic);
       });
     }
@@ -370,11 +369,139 @@ const rootApp = createApp({
       document.getElementById('stats').value = null;
       document.getElementById('skills').value = null;
 
-      updateDefStats();
-      updateSkillList();
+      defStats.value.stats.forEach(dic => dic.value=null);
+      defStats.value.params.forEach(dic => dic.value=null);
+      defStats.value.else.forEach(dic => dic.value=null);
+      skillList.value.splice(0);
     }
 
+    async function importUnit (e) {
+      if (!e.currentTarget.value) return;
+      const unit = JSON.parse(e.currentTarget.value);
+      if (unit.kind!='character') return;
 
+      // unit setting
+      if (settingDic.value.importUnitSetting) {
+        settingDic.value.color = unit.data.color?.toLowerCase() ?? initSettingDic.color;
+        if (unit.data.unitSize) settingDic.value.unitSize = unit.data.unitSize;
+        settingDic.faces = unit.data.faces?.map(e => e.label).filter(Boolean) || initSettingDic.faces;
+  
+        if ('secret' in unit.data) settingDic.value.secretUnit = unit.data.secret;
+        if ('invisible' in unit.data) settingDic.value.invisibleUnit = unit.data.invisible;
+        if ('hideStatus' in unit.data) settingDic.value.hideUnit = unit.data.hideStatus;
+      }
+
+      // name & memo
+      document.getElementById('name').value = `${unit.data.name}\n${unit.data.memo}`.trim();
+
+      // params & stats
+      const statsEl = document.getElementById('stats');
+      statsEl.value = unit.data.params.map(e => `${e.label}  ${e.value}`).join('\t');
+      statsEl.value += '\n' + unit.data.status.map(e => `${e.label}  ${e.max??e.value}`).join('\t');
+
+      defStats.value.params.forEach((dic,key) => {
+        const i = unit.data.params.findIndex(param=>param.label===key);
+        if (i===-1) dic.value=null;
+        else {
+          dic.value = unit.data.params.splice(i,1)[0].value;
+          if (key!=='DB') dic.value = Number.parseInt(dic.value);
+        }
+      });
+      defStats.value.stats.forEach((dic,key) => {
+        const i = unit.data.status.findIndex(status=>status.label===key);
+        if (i===-1) dic.value = null;
+        else dic.value = Number.parseInt(unit.data.status.splice(i,1)[0].value);
+      });
+      defStats.value.else.forEach((dic,key) => {
+        const i = unit.data.status.findIndex(status=>status.label===key);
+        if (i===-1) dic.value = null;
+        else dic.value = Number.parseInt(unit.data.status.splice(i,1)[0].value);
+      });
+      unit.data.params.forEach(param => exStats.value.params.push({id:id++, ...param}));
+      unit.data.status.forEach(status => 
+        exStats.value.stats.push({id:id++, label:status.label, value:String(status.max ?? status.value)})
+      );
+
+      // commands & idea/luck/know
+      const {idea} = unit.data.commands.match(/(?<idea>\d+).*アイディ?ア|アイディ?ア.*@(?<idea>\d+)/)?.groups ?? {idea:null};
+      const {luck} = unit.data.commands.match(/(?<luck>\d+).*幸運|幸運.*@(?<luck>\d+)/)?.groups ?? {luck:null};
+      const {know} = unit.data.commands.match(/(?<know>\d+).*知識|知識.*@(?<know>\d+)/)?.groups ?? {know:null};
+
+      defStats.value.else.get('アイデア').value = idea;
+      defStats.value.else.get('幸運').value = luck;
+      defStats.value.else.get('知識').value = know;
+
+      statsEl.value += '\n' + [
+        idea ? `アイデア  ${idea}` : '',
+        luck ? `幸運  ${luck}` : '',
+        know ? `知識  ${know}` : ''
+      ].join('\t');
+      statsEl.value = statsEl.value.trim();
+
+      document.getElementById('skills').value = [
+        [/^.*<=\{.*\}.*$/mg, ''], 
+        [/^.*(?:アイディ?ア|幸運|知識).*$/mg, ''], 
+        [' ', '_'],
+      ]
+        .reduce((acc,cur) => acc.replaceAll(cur[0],cur[1]), unit.data.commands)
+        .trim();
+
+      updateSkillList();
+      e.currentTarget.value = null;
+    }
+
+    function exportUnit (e) {
+      const nameEl = document.getElementById('name');
+
+      const unit = { 
+        kind: 'character',
+        data: {
+          name: nameEl.value.trim().split('\n')[0].trim(),
+          initiative: defStats.value.params.get('DEX').value || 0,
+          width: settingDic.value.unitSize,
+          color: settingDic.value.color ?? initSettingDic.color,
+          memo:  nameEl.value.replace(/.+\n/,'').trim(),
+          commands: getChatpalette(),
+          params: [],
+          status: [],
+          faces:  [],
+          secret:     settingDic.value.secretUnit,
+          invisible:  settingDic.value.invisibleUnit,
+          hideStatus: settingDic.value.hideUnit
+        }
+      };
+
+      // params
+      defStats.value.params.forEach((dic,key) => {
+        if (!dic.del && dic.value) unit.data.params.push({label:key, value:String(dic.value)});
+      });
+      exStats.value.params.forEach(dic => {
+        if (dic.value) unit.data.params.push({label:dic.label, value:dic.value});
+      });
+
+      // stats
+      defStats.value.stats.forEach((dic,key) => {
+        if (!dic.del && dic.value) unit.data.status.push({label:key, value:dic.value, max:dic.value});
+      });
+
+      const luck = defStats.value.else.get('幸運').value;
+      if (!settingDic.value.is6th && luck) unit.data.status.push({label:'幸運', value:luck, max:luck});
+
+      exStats.value.stats.forEach(dic => {
+        const arr = dic.value.split('/').map(el=>Number.parseInt(el));
+        if (Number.isNaN(arr[0])) return;
+        const status = {label:dic.label, value:arr[0]};
+        if (arr.length==2 && !Number.isNaN(arr[1])) status.max = arr[1];
+        unit.data.status.push(status);
+      });
+
+      // faces
+      unit.data.faces = settingDic.value.faces.map(face => {return {label:face, iconUrl:null};});
+
+      copy2clipboard(e.currentTarget, JSON.stringify(unit));
+      console.log(unit);
+      return unit;
+    }
 
     function getChatpalette () {
       return refChatList.value
@@ -383,8 +510,7 @@ const rootApp = createApp({
         .join('\n');
     }
 
-    function copy2clipboard(e, text) {
-      const element = e.currentTarget;
+    function copy2clipboard(element, text) {
       const defText = element.innerText;
       navigator.clipboard.writeText(text);
       element.innerText = 'Copied!';
@@ -436,9 +562,10 @@ HP 12  MP 30  SAN 10  DB +1D4
 
 
     onMounted(async () => {
-      const json = await fetch('./setting.json').then(res => res.json());
+      const json = await fetch('./setting.json').then(res=>res.json());
 
       settingDic.value = json.setting;
+      initSettingDic = json.setting;
 
       document.getElementById('name').placeholder = json.placeholder.name.join('\n');
       document.getElementById('stats').placeholder = json.placeholder.stats.join('\n');
@@ -450,7 +577,6 @@ HP 12  MP 30  SAN 10  DB +1D4
 
 
     return {
-      is6th,
       settingDic,
       chatTargets,
 
@@ -469,8 +595,10 @@ HP 12  MP 30  SAN 10  DB +1D4
       updateDefStats,
       updateSkillList,
       clear,
+      importUnit,
 
       getChatpalette,
+      exportUnit,
       copy2clipboard,
 
       dragIndex,
