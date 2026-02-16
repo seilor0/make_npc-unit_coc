@@ -1,7 +1,11 @@
-const { createApp, ref, computed, watch, onMounted } = Vue;
+import toggleButton from './components/component-toggle-button.js'
+const { createApp, ref, computed, watch, onMounted, onBeforeMount } = Vue;
 
 
 const rootApp = createApp({
+  components: {
+    toggleButton
+  },
   setup() {
     let id = 0;
     let initSetting = {};

@@ -235,10 +235,9 @@
           <div class="settingWrapper" style="font-size: 0.9rem;column-gap: 0.75rem;height: fit-content;margin-block: 0.25rem 0;margin-inline-start: -1rem;">
             <template v-for="data in chatTargets" :key="data.id">
               <span>{{data.label}}</span>
-              <label class="toggle-button" style="--color:lightsalmon">
-                <input type="checkbox" v-model="data.value"/>
-                <span class="slider"></span>
-              </label>
+              <toggle-button style="--color:lightsalmon"
+                :is-checked = "data.value" @update = "value => data.value=value"
+              ></toggle-button>
             </template>
           </div>
 
@@ -367,12 +366,10 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
       </header>
       <section class="settingWrapper" style="width: 22rem;">
         <span>システム</span>
-        <label class="toggle-button">
-          <input type="checkbox" v-model="setting.is6th">
-          <span class="slider"></span>
-          <span class="checked">CoC6th</span>
-          <span class="not-checked">CoC7th</span>
-        </label>
+        <toggle-button :top-is-slider="true"
+          :is-checked="setting.is6th" @update="value => setting.is6th=value"
+          text-checked="CoC6th" text-not-checked="CoC7th"
+        ></toggle-button>
         <span>判定ダイス</span>
         <select v-model="setting.dice">
           <option value="CC">CC</option>
@@ -388,19 +385,15 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
         <span></span>
         <div class="settingWrapper" style="margin: 0;column-gap: 0.5rem;">
           <span>単体ダイス</span>
-          <label class="toggle-button">
-            <input type="checkbox" v-model="setting.secretSingleDice">
-            <span class="slider"></span>
-            <span class="checked">シークレット</span>
-            <span class="not-checked">オープン</span>
-          </label>
+          <toggle-button :top-is-slider="true"
+            :is-checked="setting.secretSingleDice" @update="value => setting.secretSingleDice=value"
+            text-checked="シークレット" text-not-checked="オープン"
+          ></toggle-button>
           <span>choice</span>
-          <label class="toggle-button">
-            <input type="checkbox" v-model="setting.secretChoice">
-            <span class="slider"></span>
-            <span class="checked">シークレット</span>
-            <span class="not-checked">オープン</span>
-          </label>
+          <toggle-button :top-is-slider="true"
+            :is-checked="setting.secretChoice" @update="value => setting.secretChoice=value"
+            text-checked="シークレット" text-not-checked="オープン"
+          ></toggle-button>
         </div>
       </section>
     </dialog>
@@ -415,26 +408,20 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
       <section style="max-width: 22rem;">
         <div class="settingWrapper">
           <span>ステータス</span>
-          <label class="toggle-button">
-            <input type="checkbox" v-model="setting.secretUnit">
-            <span class="slider"></span>
-            <span class="checked">秘匿</span>
-            <span class="not-checked">公開</span>
-          </label>
+          <toggle-button :top-is-slider="true"
+            :is-checked="setting.secretUnit" @update="value=>setting.secretUnit=value"
+            text-checked="秘匿" text-not-checked="公開"
+          ></toggle-button>
           <span>発言アイコン</span>
-          <label class="toggle-button">
-            <input type="checkbox" v-model="setting.invisibleUnit">
-            <span class="slider"></span>
-            <span class="checked">非表示</span>
-            <span class="not-checked">表示</span>
-          </label>
+          <toggle-button :top-is-slider="true"
+            :is-checked="setting.invisibleUnit" @update="value=>setting.invisibleUnit=value"
+            text-checked="非表示" text-not-checked="表示"
+          ></toggle-button>
           <span>コマ一覧</span>
-          <label class="toggle-button">
-            <input type="checkbox"  v-model="setting.hideUnit">
-            <span class="slider"></span>
-            <span class="checked">非表示</span>
-            <span class="not-checked">表示</span>
-          </label>
+          <toggle-button :top-is-slider="true"
+            :is-checked="setting.hideUnit" @update="value=>setting.hideUnit=value"
+            text-checked="非表示" text-not-checked="表示"
+          ></toggle-button>
         </div>
         <hr>
         <div class="settingWrapper">
@@ -463,13 +450,11 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
         </button>
       </header>
       <section>
-        <textarea style="width: 20rem;max-height: 20rem;min-height: 6rem;" placeholder="コマをここに貼り付け" @change="importUnit"></textarea>
-        <label class="toggle-button" style="justify-content: flex-end;">
-          <input type="checkbox" v-model="setting.importUnitSetting">
-          <span class="checked">数値 & コマ設定をインポート</span>
-          <span class="not-checked">数値のみインポート</span>
-          <span class="slider"></span>
-        </label>
+        <textarea style="width: 20rem;max-height: 20rem;min-height: 6rem;" placeholder="コマを貼り付け" @change="importUnit"></textarea>
+        <toggle-button :top-is-slider="false" style="display: flex;justify-content: flex-end;"
+          :is-checked="setting.importUnitSetting" @update="value=>setting.importUnitSetting=value"
+          text-checked="数値 & コマ設定をインポート" text-not-checked="数値のみインポート"
+        ></toggle-button>
       </section>
     </dialog>
 
