@@ -6,7 +6,7 @@ const rootApp = createApp({
     let id = 0;
     let initSettingDic = {};
 
-    const settingDic = ref({});
+    const setting = ref({});
 
     const chatTargets = ref([
       { id: id++, label: '差分', value: true },
@@ -39,7 +39,7 @@ const rootApp = createApp({
         ['知識', { id: id++, value: null }],
       ]),
     });
-    watch(() => settingDic.value.is6th, updateDefStats);
+    watch(() => setting.value.is6th, updateDefStats);
 
     const exStats = ref({ params: [], stats: [] });
     function addRow(key)    { exStats.value[key].push({ id: id++, label: '', value: '' }); }
@@ -92,8 +92,8 @@ const rootApp = createApp({
 
           // 差分
           if (chatTarget == '差分') {
-            if (!settingDic.value.faces?.length) return;
-            settingDic.value.faces.forEach(face => rawDicArr.push({ id: id++, type: 'line', value: face }));
+            if (!setting.value.faces?.length) return;
+            setting.value.faces.forEach(face => rawDicArr.push({ id: id++, type: 'line', value: face }));
             rawDicArr.push({ id: id++, type: 'line', value: '===========' });
 
 
@@ -108,7 +108,7 @@ const rootApp = createApp({
           } else if (chatTarget == '知識etc.') {
             defStats.value.else.forEach((dic, key) => {
               if (!dic.value) return;
-              if (key=='幸運' && !settingDic.value.is6th && settingDic.value.rollStyle!='@') rawDicArr.push({ type: 'roll', name: '幸運', value: '{幸運}' });
+              if (key=='幸運' && !setting.value.is6th && setting.value.rollStyle!='@') rawDicArr.push({ type: 'roll', name: '幸運', value: '{幸運}' });
               else rawDicArr.push({ id: id++, type: 'roll', name: key, value: dic.value });
             });
 
@@ -125,8 +125,8 @@ const rootApp = createApp({
             defStats.value.params.forEach((dic, key) => {
               if (key=='DB') return;
               if (!dic.value || dic.del) return;
-              const end = settingDic.value.is6th ? '*5' : '';
-              const value = settingDic.value.rollStyle=='@' ? dic.value * (settingDic.value.is6th?5:1) : `{${key}}${end}`;
+              const end = setting.value.is6th ? '*5' : '';
+              const value = setting.value.rollStyle=='@' ? dic.value * (setting.value.is6th?5:1) : `{${key}}${end}`;
               rawDicArr.push({id: id++, type: 'roll', name: `${key}${end}`, value: value});
             });
           }
@@ -140,10 +140,10 @@ const rootApp = createApp({
         const result = {del:false, secret:false, text:'', times:''};
         
         if (
-          dic.type==='dice'     && settingDic.value.secretSingleDice     ||
-          dic.type==='choice'   && settingDic.value.secretChoice         ||
-          dic.type==='roll'     && settingDic.value.rollStyle==='secret' ||
-          dic.type==='elseRoll' && settingDic.value.rollStyle==='secret'
+          dic.type==='dice'     && setting.value.secretSingleDice     ||
+          dic.type==='choice'   && setting.value.secretChoice         ||
+          dic.type==='roll'     && setting.value.rollStyle==='secret' ||
+          dic.type==='elseRoll' && setting.value.rollStyle==='secret'
         ) result.secret = true;
 
         const dic2text = (dic) => {
@@ -156,12 +156,12 @@ const rootApp = createApp({
             case 'choice':
               return `${dic.value}${name}`;
             case 'elseRoll':
-              if      (settingDic.value.dice=='CC')  dic.value = dic.value.replace(/(CBR|RES)B/i,'$1');
-              else if (settingDic.value.dice=='CCB') dic.value = dic.value.replace(/(CBR|RES)([^B])/i,'$1B$2');
+              if      (setting.value.dice=='CC')  dic.value = dic.value.replace(/(CBR|RES)B/i,'$1');
+              else if (setting.value.dice=='CCB') dic.value = dic.value.replace(/(CBR|RES)([^B])/i,'$1B$2');
               return `${dic.value}${name}`;
             case 'roll':
-              if (settingDic.value.rollStyle=='@') return `${settingDic.value.dice}${name} @${dic.value}`;
-              else return `${settingDic.value.dice}<=${dic.value}${name}`;
+              if (setting.value.rollStyle=='@') return `${setting.value.dice}${name} @${dic.value}`;
+              else return `${setting.value.dice}<=${dic.value}${name}`;
           }
         };
         result.text = dic2text(dic);
@@ -212,7 +212,7 @@ const rootApp = createApp({
         const sum = (
           defStats.value.params.get('STR').value +
           defStats.value.params.get('SIZ').value
-        ) / (settingDic.value.is6th ? 1 : 5);
+        ) / (setting.value.is6th ? 1 : 5);
 
         if (sum <= 16) db = '-1d4';
         else if (sum > 16 && sum <= 24) db = 0;
@@ -231,25 +231,25 @@ const rootApp = createApp({
         defStats.value.params.get('SIZ').value
       ) {
         const sum = defStats.value.params.get('CON').value + defStats.value.params.get('SIZ').value;
-        hp = settingDic.value.is6th ? Math.ceil(sum / 2) : Math.floor(sum / 10);
+        hp = setting.value.is6th ? Math.ceil(sum / 2) : Math.floor(sum / 10);
       }
 
       const mp = parseInt(text.match(/(?:MP|マジック・?ポイント)\D*(\d+)/i)?.[1]) ||
-        defStats.value.params.get('POW').value / (settingDic.value.is6th ? 1 : 5) || null;
+        defStats.value.params.get('POW').value / (setting.value.is6th ? 1 : 5) || null;
 
       const san = parseInt(text.match(/(?:SAN値?|正気度)\D*(\d+)/i)?.[1]) ||
-        defStats.value.params.get('POW').value * (settingDic.value.is6th ? 5 : 1) || null;
+        defStats.value.params.get('POW').value * (setting.value.is6th ? 5 : 1) || null;
 
 
       // アイデア・幸運・知識
       const idea = parseInt(text.match(/(?:ID[AE]|アイディ?ア)\D*(\d+)/i)?.[1]) ||
-        defStats.value.params.get('INT').value * (settingDic.value.is6th ? 5 : 1) || null;
+        defStats.value.params.get('INT').value * (setting.value.is6th ? 5 : 1) || null;
 
       const luck = parseInt(text.match(/(?:LUCK|幸運)\D*(\d+)/i)?.[1]) ||
-        (settingDic.value.is6th ? defStats.value.params.get('POW').value * 5 : null) || null;
+        (setting.value.is6th ? defStats.value.params.get('POW').value * 5 : null) || null;
 
       const know = parseInt(text.match(/(?:KNOW|知識)\D*(\d+)/i)?.[1]) ||
-        defStats.value.params.get('EDU').value * (settingDic.value.is6th ? 5 : 1) || null;
+        defStats.value.params.get('EDU').value * (setting.value.is6th ? 5 : 1) || null;
 
       defStats.value.stats.get('HP').value = hp;
       defStats.value.stats.get('MP').value = mp;
@@ -266,7 +266,7 @@ const rootApp = createApp({
       const baseArr = [
         [/　/g, ' '],
         [/[！-｝]/g, function (s) { return String.fromCharCode(s.charCodeAt(0) - 0xFEE0); }],
-        [new RegExp(`[${settingDic.value.delChar}]`, 'g'), ''],
+        [new RegExp(`[${setting.value.delChar}]`, 'g'), ''],
         [/_/g, ' '],
       ]
         .reduce((acc, cur) => acc.replaceAll(cur[0], cur[1]), document.getElementById('skills').value)
@@ -381,14 +381,14 @@ const rootApp = createApp({
       if (unit.kind!='character') return;
 
       // unit setting
-      if (settingDic.value.importUnitSetting) {
-        settingDic.value.color = unit.data.color?.toLowerCase() ?? initSettingDic.color;
-        if (unit.data.unitSize) settingDic.value.unitSize = unit.data.unitSize;
-        settingDic.faces = unit.data.faces?.map(e => e.label).filter(Boolean) || initSettingDic.faces;
+      if (setting.value.importUnitSetting) {
+        setting.value.color = unit.data.color?.toLowerCase() ?? initSettingDic.color;
+        if (unit.data.unitSize) setting.value.unitSize = unit.data.unitSize;
+        setting.faces = unit.data.faces?.map(e => e.label).filter(Boolean) || initSettingDic.faces;
   
-        if ('secret' in unit.data) settingDic.value.secretUnit = unit.data.secret;
-        if ('invisible' in unit.data) settingDic.value.invisibleUnit = unit.data.invisible;
-        if ('hideStatus' in unit.data) settingDic.value.hideUnit = unit.data.hideStatus;
+        if ('secret' in unit.data) setting.value.secretUnit = unit.data.secret;
+        if ('invisible' in unit.data) setting.value.invisibleUnit = unit.data.invisible;
+        if ('hideStatus' in unit.data) setting.value.hideUnit = unit.data.hideStatus;
       }
 
       // name & memo
@@ -458,16 +458,16 @@ const rootApp = createApp({
         data: {
           name: nameEl.value.trim().split('\n')[0].trim(),
           initiative: defStats.value.params.get('DEX').value || 0,
-          width: settingDic.value.unitSize,
-          color: settingDic.value.color ?? initSettingDic.color,
+          width: setting.value.unitSize,
+          color: setting.value.color ?? initSettingDic.color,
           memo:  nameEl.value.replace(/.+\n/,'').trim(),
           commands: getChatpalette(),
           params: [],
           status: [],
           faces:  [],
-          secret:     settingDic.value.secretUnit,
-          invisible:  settingDic.value.invisibleUnit,
-          hideStatus: settingDic.value.hideUnit
+          secret:     setting.value.secretUnit,
+          invisible:  setting.value.invisibleUnit,
+          hideStatus: setting.value.hideUnit
         }
       };
 
@@ -485,7 +485,7 @@ const rootApp = createApp({
       });
 
       const luck = defStats.value.else.get('幸運').value;
-      if (!settingDic.value.is6th && luck) unit.data.status.push({label:'幸運', value:luck, max:luck});
+      if (!setting.value.is6th && luck) unit.data.status.push({label:'幸運', value:luck, max:luck});
 
       exStats.value.stats.forEach(dic => {
         const arr = dic.value.split('/').map(el=>Number.parseInt(el));
@@ -496,7 +496,7 @@ const rootApp = createApp({
       });
 
       // faces
-      unit.data.faces = settingDic.value.faces.map(face => {return {label:face, iconUrl:null};});
+      unit.data.faces = setting.value.faces.map(face => {return {label:face, iconUrl:null};});
 
       copy2clipboard(e.currentTarget, JSON.stringify(unit));
       console.log(unit);
@@ -564,7 +564,7 @@ HP 12  MP 30  SAN 10  DB +1D4
     onMounted(async () => {
       const json = await fetch('./setting.json').then(res=>res.json());
 
-      settingDic.value = json.setting;
+      setting.value = json.setting;
       initSettingDic = json.setting;
 
       document.getElementById('name').placeholder = json.placeholder.name.join('\n');
@@ -577,7 +577,7 @@ HP 12  MP 30  SAN 10  DB +1D4
 
 
     return {
-      settingDic,
+      setting,
       chatTargets,
 
       defStats,

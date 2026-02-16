@@ -81,7 +81,7 @@
               <p style="margin-block: 0.5rem;">
                 <span class="title">消す文字（正規表現）：</span>
               </p>
-              <input type="text" v-model="settingDic.delChar" @input="updateSkillList" style="font-family: 'Zen Kaku Gothic New';field-sizing: content;">
+              <input type="text" v-model="setting.delChar" @input="updateSkillList" style="font-family: 'Zen Kaku Gothic New';field-sizing: content;">
             </div>
           </div>
         </div>
@@ -232,10 +232,10 @@
             </tbody>
           </table>
 
-          <div class="settingWrapper" name="chatTarget">
+          <div class="settingWrapper" style="font-size: 0.9rem;column-gap: 0.75rem;height: fit-content;margin-block: 0.25rem 0;margin-inline-start: -1rem;">
             <template v-for="data in chatTargets" :key="data.id">
               <span>{{data.label}}</span>
-              <label class="toggle-button">
+              <label class="toggle-button" style="--color:lightsalmon">
                 <input type="checkbox" v-model="data.value"/>
                 <span class="slider"></span>
               </label>
@@ -368,35 +368,35 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
       <section class="settingWrapper" style="width: 22rem;">
         <span>システム</span>
         <label class="toggle-button">
-          <input type="checkbox" v-model="settingDic.is6th">
+          <input type="checkbox" v-model="setting.is6th">
           <span class="slider"></span>
           <span class="checked">CoC6th</span>
           <span class="not-checked">CoC7th</span>
         </label>
         <span>判定ダイス</span>
-        <select v-model="settingDic.dice">
+        <select v-model="setting.dice">
           <option value="CC">CC</option>
           <option value="CCB">CCB</option>
           <option value="1d100">1d100</option>
         </select>
         <span>形式</span>
-        <select v-model="settingDic.rollStyle">
-          <option value="normal">{{settingDic.dice}}&lt;=70 【...】</option>
-          <option value="secret">s{{settingDic.dice}}&lt;=70 【...】</option>
-          <option value="@">{{settingDic.dice}} 【...】@70</option>
+        <select v-model="setting.rollStyle">
+          <option value="normal">{{setting.dice}}&lt;=70 【...】</option>
+          <option value="secret">s{{setting.dice}}&lt;=70 【...】</option>
+          <option value="@">{{setting.dice}} 【...】@70</option>
         </select>
         <span></span>
         <div class="settingWrapper" style="margin: 0;column-gap: 0.5rem;">
           <span>単体ダイス</span>
           <label class="toggle-button">
-            <input type="checkbox" v-model="settingDic.secretSingleDice">
+            <input type="checkbox" v-model="setting.secretSingleDice">
             <span class="slider"></span>
             <span class="checked">シークレット</span>
             <span class="not-checked">オープン</span>
           </label>
           <span>choice</span>
           <label class="toggle-button">
-            <input type="checkbox" v-model="settingDic.secretChoice">
+            <input type="checkbox" v-model="setting.secretChoice">
             <span class="slider"></span>
             <span class="checked">シークレット</span>
             <span class="not-checked">オープン</span>
@@ -416,21 +416,21 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
         <div class="settingWrapper">
           <span>ステータス</span>
           <label class="toggle-button">
-            <input type="checkbox" v-model="settingDic.secretUnit">
+            <input type="checkbox" v-model="setting.secretUnit">
             <span class="slider"></span>
             <span class="checked">秘匿</span>
             <span class="not-checked">公開</span>
           </label>
           <span>発言アイコン</span>
           <label class="toggle-button">
-            <input type="checkbox" v-model="settingDic.invisibleUnit">
+            <input type="checkbox" v-model="setting.invisibleUnit">
             <span class="slider"></span>
             <span class="checked">非表示</span>
             <span class="not-checked">表示</span>
           </label>
           <span>コマ一覧</span>
           <label class="toggle-button">
-            <input type="checkbox"  v-model="settingDic.hideUnit">
+            <input type="checkbox"  v-model="setting.hideUnit">
             <span class="slider"></span>
             <span class="checked">非表示</span>
             <span class="not-checked">表示</span>
@@ -440,17 +440,17 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
         <div class="settingWrapper">
           <span>発言カラー</span>
           <div style="display: grid;grid-template-columns: auto auto 1fr;gap: 0.5rem;align-items: center;">
-            <input type="color" v-model="settingDic.color">
-            <input type="text" v-model="settingDic.color" style="background-color: transparent;height: stretch;width: 7ch;" >
-            <p class="ccfoliaName" :style="{color: settingDic.color}">探索者名</p>
+            <input type="color" v-model="setting.color">
+            <input type="text" v-model="setting.color" style="background-color: transparent;height: stretch;width: 7ch;" >
+            <p class="ccfoliaName" :style="{color: setting.color}">探索者名</p>
           </div>
           <span>コマサイズ</span>
           <div style="display: flex;gap: 0.5rem;">
-            <input type="range" min="1" max="30" v-model="settingDic.unitSize" style="flex-grow: 1">
-            <input type="number" min="1" v-model="settingDic.unitSize">
+            <input type="range" min="1" max="30" v-model="setting.unitSize" style="flex-grow: 1">
+            <input type="number" min="1" v-model="setting.unitSize">
           </div>
           <span>差分<span style="font-size: smaller;"> (ラベル)</span></span>
-          <textarea :value="settingDic.faces?.join('\n')" @change="e => settingDic.faces = e.currentTarget.value.split('\n').filter(Boolean).map(row=>(row.startsWith('@')?'':'@')+row)"></textarea>
+          <textarea :value="setting.faces?.join('\n')" @change="e => setting.faces = e.currentTarget.value.split('\n').filter(Boolean).map(row=>(row.startsWith('@')?'':'@')+row)"></textarea>
         </div>
       </section>
     </dialog>
@@ -465,7 +465,7 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
       <section>
         <textarea style="width: 20rem;max-height: 20rem;min-height: 6rem;" placeholder="コマをここに貼り付け" @change="importUnit"></textarea>
         <label class="toggle-button" style="justify-content: flex-end;">
-          <input type="checkbox" v-model="settingDic.importUnitSetting">
+          <input type="checkbox" v-model="setting.importUnitSetting">
           <span class="checked">数値 & コマ設定をインポート</span>
           <span class="not-checked">数値のみインポート</span>
           <span class="slider"></span>
@@ -483,7 +483,6 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
     </div>
   </div>
   
-  <!-- <script type="module" src="./code.js"></script> -->
   <script type="module" src="./code_vue.js"></script>
 </body>
 
