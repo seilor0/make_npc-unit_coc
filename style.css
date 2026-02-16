@@ -127,7 +127,7 @@
 
   }
   
-  div.buttonWrap {
+  div.button-wrap {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -150,7 +150,7 @@
   }
   
   
-  .settingWrapper {
+  .setting-wrapper {
     display: grid;
     grid-template-columns: auto 1fr;
     column-gap: 1.5rem;
@@ -179,7 +179,7 @@
     }
   }
   
-  div.outputDiv {
+  div.output-div {
     display: flex;
     gap: 2rem;
     @media (max-width:600px) {
@@ -188,18 +188,13 @@
     }
   }
   
-  .outputL {
+  .output-l {
     display: grid;
     grid-template-columns: repeat(2, min-content);
     grid-template-rows: auto 1fr;
     align-items: start;
     gap: 1rem;
     height: max-content;
-  }
-  
-  .greenBold {
-    color: seagreen;
-    font-weight: 600;
   }
 
   div.graybox {
@@ -256,7 +251,7 @@
     }
   }
   
-  .ccfoliaName {
+  .ccfolia-name {
     font-family: 'Roboto', 'Helvetica', 'Arial', 'sans-serif';
     font-weight: bold;
     color: #888;
@@ -271,7 +266,7 @@
   }
 
 
-  #skillTable {
+  #skill-table {
     grid-column: 1 / -1;
     th, td {
       text-align: center;
@@ -280,20 +275,20 @@
     th {cursor: pointer;}
   }
   
-  #chatTable {
+  #chat-table {
     height: fit-content;
     tr > :nth-child(2) {width: 1rem}
     thead th:last-child {padding-inline: 8ch}
   }
   
-  .valueTable {
+  .value-table {
     width: max-content;
     th, td {text-align: center;}
     th {width: 8ch;}
     td {width: 7ch;}
   }
   
-  .secretTable {
+  .secret-table {
     --indent: 1rem;
     margin-inline-start: calc(-1*var(--indent));
     caption {margin-inline-start: var(--indent);}
@@ -312,7 +307,7 @@
     }
   }
 
-  .footerContent {
+  .footer-content {
     width: max-content;
     padding-block-end: 0.75rem;
     border-block-end: 1px solid #aaa;
