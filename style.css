@@ -67,33 +67,6 @@
 
 
 @layer each {
-  /* --------------------------- */
-  /*            list             */
-  :is(main,dialog) li:not(:first-child) {
-    margin-block-start: 0.25em;
-    :has(br) > & {margin-block-start: 0.75rem;}
-  }
-  :is(main,dialog) li::marker{
-    color: seagreen;
-    font-weight: 600;
-  }
-  :is(main,dialog) li li::marker {content:'▹';}
-  
-  :is(main,dialog) ul {
-    padding-inline-start: 0.9em;
-    margin-block: 0.5em;
-    li {
-      padding-inline-start: 0.5ch;
-      &.ok::marker {content:'✓';}
-      &.ng::marker {
-        content:'✕';
-        color: rgb(205, 16, 35);
-      }
-    }
-  }
-  /* --------------------------- */
-  
-
   button.export {
     --size: 6rem;
     color: white;
@@ -126,7 +99,7 @@
 
   }
   
-  div.button-wrap {
+  .button-wrap {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -154,7 +127,7 @@
     grid-template-columns: auto 1fr;
     column-gap: 1.5rem;
     row-gap: 0.5rem;
-    margin-block: 1rem;
+    margin-block: 0.5rem;
   
     > :nth-child(odd) {
       background-color: hsl( 0 0 90);
@@ -178,7 +151,7 @@
     }
   }
   
-  div.output-div {
+  .output-div {
     display: flex;
     gap: 2rem;
     @media (max-width:600px) {
@@ -196,12 +169,11 @@
     height: max-content;
   }
 
-  div.graybox {
+  .graybox {
     background-color: #e6e6e6;
-    padding: 0.5em 0.75em;
+    padding: 0.5em 1em;
+    margin-block: 0.5em;
     border-radius: 0.5em;
-    margin: 0.5em 0.25em;
-    font-size: calc(1rem - 1px);
   }
   
   span.title {
@@ -209,6 +181,16 @@
     color: #fafafa; 
     font-weight: 500; 
     padding-inline: 0.5ch;
+  }
+
+  p.title {
+    color: white;
+    background-color: var(--accent);
+    padding: 0.25ch 1ch;
+    margin-inline-start: -0.25em;
+    border-radius: 2.5rem;
+    width: fit-content;
+    font-size: calc(1em + 0.5px);
   }
   
   div.title {
@@ -243,11 +225,14 @@
       bottom: 0;
       left: 2ch;
   
-      > ul {
-        margin: 0;
-      }
       &:not(:is(:hover + &, :hover, :has(:focus))) {display: none;}
     }
+      
+    ul {
+      margin: 0.5em 0;
+      padding-inline-start: 0.9em;
+    }
+    li {padding-inline-start: 0.5ch;}
   }
   
   .ccfolia-name {
@@ -264,6 +249,21 @@
     :focus ~ & {visibility: visible;}
   }
 
+
+  :is(main,dialog) li::marker{
+    color: seagreen;
+    font-weight: 600;
+  }
+  :is(main,dialog) li li::marker {content:'▹';}
+  
+  li.ok::marker {
+    content:'✓';
+    color: var(--accent);
+  }
+  li.ng::marker {
+    content:'✕';
+    color: rgb(205, 16, 35);
+  }
 
   #skill-table {
     grid-column: 1 / -1;
@@ -499,8 +499,16 @@
     }
   
     section {
-      padding: 0.5rem 0.75rem;
-      p {margin: 0;}
+      padding: 0.75rem;
+    }
+
+    p {
+      font-weight: 400;
+    }
+
+    ul {
+      margin-block: 0;
+      padding-inline-start: 2ch;
     }
   }
   

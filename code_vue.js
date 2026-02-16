@@ -1,6 +1,6 @@
 import toggleButton from './components/toggle-button.js'
 import buttonCssIcon from './components/button-css-icon.js'
-const { createApp, ref, computed, watch, onMounted, onBeforeMount } = Vue;
+const { createApp, ref, computed, watch, onMounted } = Vue;
 
 
 const rootApp = createApp({
@@ -381,7 +381,7 @@ const rootApp = createApp({
       skillList.value.splice(0);
     }
 
-    async function importUnit (e) {
+    function importUnit (e) {
       if (!e.currentTarget.value) return;
       const unit = JSON.parse(e.currentTarget.value);
       if (unit.kind!='character') return;
