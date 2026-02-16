@@ -1,5 +1,3 @@
-const {ref} = Vue
-
 export default {
   props: {
     isChecked: {

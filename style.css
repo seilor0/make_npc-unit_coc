@@ -34,8 +34,7 @@
   padding: 0.5rem;
   border: 1px solid darkgray;
   border-radius: 3px;
-
-  &.narrow {padding: 0.25rem;}
+  caption & {padding: 0.25rem;}
 }
 
 .icon {

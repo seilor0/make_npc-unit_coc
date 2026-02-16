@@ -101,12 +101,8 @@
             <table class="value-table secret-table" style="grid-row: 1 / 3;">
               <caption>
                 パラメータ
-                <button class="icon-frame narrow" @click="addRow('params')">
-                  <div class="icon icon-plus"></div>
-                </button>
-                <button class="icon-frame narrow" @click="deleteRow('params')">
-                  <div class="icon icon-minus"></div>
-                </button>
+                <button-css-icon icon-name="icon-plus" @click="addRow('params')"></button-css-icon>
+                <button-css-icon icon-name="icon-minus" @click="deleteRow('params')"></button-css-icon>
               </caption>
               <tbody>
                 <tr v-for="[key,dic] in defStats.params" :key="dic.id" :class="{disable: dic.del}" @click="dic.del=!dic.del">
@@ -134,12 +130,8 @@
             <table class="value-table secret-table">
               <caption>
                 ステータス
-                <button class="icon-frame narrow" @click="addRow('stats')">
-                  <div class="icon icon-plus"></div>
-                </button>
-                <button class="icon-frame narrow" @click="deleteRow('stats')">
-                  <div class="icon icon-minus"></div>
-                </button>
+                <button-css-icon icon-name="icon-plus" @click="addRow('stats')"></button-css-icon>
+                <button-css-icon icon-name="icon-minus" @click="deleteRow('stats')"></button-css-icon> 
               </caption>
               <tbody>
                 <tr v-for="[key,dic] in defStats.stats" :key="dic.id" :class="{disable: dic.del}" @click="dic.del=!dic.del">
@@ -297,9 +289,7 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
     <dialog id="modal-how2use" closedby="any">
       <header>
         <h2>このサイトについて</h2>
-        <button class="icon-frame" command="show-modal" commandfor="modal-how2use">
-          <div class="icon icon-close"></div>
-        </button>
+        <button-css-icon icon-name="icon-close" command="close" commandfor="modal-how2use"></button-css-icon>
       </header>
       <section>
         CoC6版 / 7版の、ココフォリア用の<br>
@@ -312,9 +302,7 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
     <dialog id="modal-useful" closedby="any">
       <header>
         <h2>便利機能</h2>
-        <button class="icon-frame" command="show-modal" commandfor="modal-useful">
-          <div class="icon icon-close"></div>
-        </button>
+        <button-css-icon icon-name="icon-close" command="close" commandfor="modal-useful"></button-css-icon>
       </header>
       <section>
         <span class="title">
@@ -360,9 +348,7 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
     <dialog id="modal-dice-setting" closedby="any">
       <header>
         <h2>チャパレ設定</h2>
-        <button class="icon-frame" command="close" commandfor="modal-dice-setting">
-          <div class="icon icon-close"></div>
-        </button>
+        <button-css-icon icon-name="icon-close" command="close" commandfor="modal-dice-setting"></button-css-icon>
       </header>
       <section class="setting-wrapper" style="width: 22rem;">
         <span>システム</span>
@@ -401,9 +387,7 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
     <dialog id="modal-unit-setting" closedby="any">
       <header>
         <h2>キャラコマ設定</h2>
-        <button class="icon-frame" popovertarget="modal" popovertargetaction="hide">
-          <div class="icon icon-close"></div>
-        </button>
+        <button-css-icon icon-name="icon-close" command="close" commandfor="modal-unit-setting"></button-css-icon>
       </header>
       <section style="max-width: 22rem;">
         <div class="setting-wrapper">
@@ -445,9 +429,7 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
     <dialog id="modal-import-unit" closedby="any">
       <header>
         <h2>ココフォリアコマをインポート</h2>
-        <button class="icon-frame" popovertarget="modal" popovertargetaction="hide">
-          <div class="icon icon-close"></div>
-        </button>
+        <button-css-icon icon-name="icon-close" command="close" commandfor="modal-import-unit"></button-css-icon>
       </header>
       <section>
         <textarea style="width: 20rem;max-height: 20rem;min-height: 6rem;" placeholder="コマを貼り付け" @change="importUnit"></textarea>
