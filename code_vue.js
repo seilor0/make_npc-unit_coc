@@ -4,7 +4,7 @@ const { createApp, ref, computed, watch, onMounted } = Vue;
 const rootApp = createApp({
   setup() {
     let id = 0;
-    let initSettingDic = {};
+    let initSetting = {};
 
     const setting = ref({});
 
@@ -382,9 +382,9 @@ const rootApp = createApp({
 
       // unit setting
       if (setting.value.importUnitSetting) {
-        setting.value.color = unit.data.color?.toLowerCase() ?? initSettingDic.color;
+        setting.value.color = unit.data.color?.toLowerCase() ?? initSetting.color;
         if (unit.data.unitSize) setting.value.unitSize = unit.data.unitSize;
-        setting.faces = unit.data.faces?.map(e => e.label).filter(Boolean) || initSettingDic.faces;
+        setting.faces = unit.data.faces?.map(e => e.label).filter(Boolean) || initSetting.faces;
   
         if ('secret' in unit.data) setting.value.secretUnit = unit.data.secret;
         if ('invisible' in unit.data) setting.value.invisibleUnit = unit.data.invisible;
@@ -459,7 +459,7 @@ const rootApp = createApp({
           name: nameEl.value.trim().split('\n')[0].trim(),
           initiative: defStats.value.params.get('DEX').value || 0,
           width: setting.value.unitSize,
-          color: setting.value.color ?? initSettingDic.color,
+          color: setting.value.color ?? initSetting.color,
           memo:  nameEl.value.replace(/.+\n/,'').trim(),
           commands: getChatpalette(),
           params: [],
@@ -565,7 +565,7 @@ HP 12  MP 30  SAN 10  DB +1D4
       const json = await fetch('./setting.json').then(res=>res.json());
 
       setting.value = json.setting;
-      initSettingDic = json.setting;
+      initSetting = json.setting;
 
       document.getElementById('name').placeholder = json.placeholder.name.join('\n');
       document.getElementById('stats').placeholder = json.placeholder.stats.join('\n');
