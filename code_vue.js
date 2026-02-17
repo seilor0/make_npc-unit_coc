@@ -546,27 +546,6 @@ const rootApp = createApp({
     };
 
 
-    // -----------------
-    //     to test
-    // -----------------
-    function toTest () {
-      document.getElementById('stats').value = 
-`STR 8 ... EDU 15
-HP 12  MP 30  SAN 10  DB +1D4
-アイデア 75  幸運 60  知識 75`;
-
-      document.getElementById('skills').value = 
-`・目星70% 聞き耳40% 図書館25%
-・CCB<=50 こぶし（パンチ）
-・1d4+db/2
-・キック　50% / 1d6+db / 1R1回
-・@happy`;
-
-      updateDefStats();
-      updateSkillList();
-    }
-
-
     onMounted(async () => {
       const json = await fetch('./setting.json').then(res=>res.json());
 
@@ -612,8 +591,6 @@ HP 12  MP 30  SAN 10  DB +1D4
       dragStart,
       dragEnter,
       dragEnd,
-
-      toTest,
     }
   }
 });
