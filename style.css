@@ -96,7 +96,6 @@
     padding-inline: 1.125rem;
   
     &:hover {text-decoration: underline;}
-
   }
   
   .button-wrap {
@@ -120,7 +119,6 @@
       transform-origin: right bottom;
     }
   }
-  
   
   .setting-wrapper {
     display: grid;
@@ -225,7 +223,7 @@
       bottom: 0;
       left: 2ch;
   
-      &:not(:is(:hover + &, :hover, :has(:focus))) {display: none;}
+      &:not(:hover, :hover + &, :has(:focus)) {display: none;}
     }
       
     ul {
@@ -248,14 +246,7 @@
     visibility: hidden;
     :focus ~ & {visibility: visible;}
   }
-
-
-  :is(main,dialog) li::marker{
-    color: seagreen;
-    font-weight: 600;
-  }
-  :is(main,dialog) li li::marker {content:'▹';}
-  
+ 
   li.ok::marker {
     content:'✓';
     color: var(--accent);
@@ -318,6 +309,16 @@
       border-block-end: none;
       flex-direction: column;
       gap: 0.75rem;
+    }
+  }
+
+  #modal-useful section {
+    padding: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+    font-size:calc(1rem - 2px);
+    @media(max-width: 600px) {
+      flex-direction: column;
     }
   }
 }
@@ -428,9 +429,7 @@
     cursor: pointer;
   }
   
-  hr {
-    margin-block: 1.5rem;
-  }
+  hr {margin-block: 1.5rem;}
 
   input[type="text"] {
     border: 1px solid gray;
@@ -464,6 +463,12 @@
       padding: 0;
     }
   }
+
+  :is(main,dialog) li::marker{
+    color: seagreen;
+    font-weight: 600;
+  }
+  :is(main,dialog) li li::marker {content:'▹';}
   
   dialog {
     background-color: #fafafa;
@@ -475,7 +480,6 @@
     padding: 0;
     
     max-height: 90%;
-    max-width: 50%;
     min-width: 20rem;
   
     header {

@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NPCコマ作成_vue</title>
+  <title>NPCコマ作成</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
@@ -21,7 +21,6 @@
         <button class="aside-button" command="show-modal" commandfor="modal-useful" style="background-color: lightsalmon;">
           便利機能
         </button>
-
         <button class="aside-button" command="show-modal" commandfor="modal-dice-setting">
           <span class="material-symbols-outlined">settings</span>
           チャパレ設定
@@ -34,7 +33,6 @@
           <span class="material-symbols-outlined">input</span>
           コマをインポート
         </button>
-
         <button class="aside-button" @click="toTest">to test</button>
       </aside>
 
@@ -87,7 +85,6 @@
         </div>
         <textarea id="skills" @input="updateSkillList"></textarea>
         <p class="annotation">※半角スペースはアンダーバー(_)で代記</p>
-
       </section>
 
       <div class="triangle"></div>
@@ -286,6 +283,15 @@ Call of Cthulhu is copyright ©1981, 2015, 2019 by Chaosium Inc. ;all rights res
 PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥルフ神話TRPG」</pre>
     </footer>
 
+    <div class="button-wrap">
+      <button class="export" style="background-color: #418660;" @click="exportUnit">
+        ココフォリア<br>コマ出力
+      </button>
+      <button class="export" @click="copy2clipboard($event.currentTarget, getChatpalette())">
+        チャパレ出力
+      </button>
+    </div>
+
     <dialog id="modal-how2use" closedby="any">
       <header>
         <h2>このサイトについて</h2>
@@ -307,7 +313,7 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
         <h2>便利機能</h2>
         <button-css-icon icon-name="icon-close" command="close" commandfor="modal-useful"></button-css-icon>
       </header>
-      <section style="padding: 1.5rem;display: flex;gap: 1.5rem;font-size:calc(1rem - 2px)">
+      <section>
         <div>
           <p class="title">並び替え</p>
           <p style="margin-block: 0.5em;">
@@ -439,15 +445,6 @@ PUBLISHED BY KADOKAWA CORPORATION 「クトゥルフ神話TRPG」「新クトゥ
         ></toggle-button>
       </section>
     </dialog>
-
-    <div class="button-wrap">
-      <button class="export" style="background-color: #418660;" @click="exportUnit">
-        ココフォリアコマ出力
-      </button>
-      <button class="export" @click="copy2clipboard($event.currentTarget, getChatpalette())">
-        チャパレ出力
-      </button>
-    </div>
   </div>
   
   <script type="module" src="./code_vue.js"></script>
