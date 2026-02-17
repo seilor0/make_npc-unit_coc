@@ -549,8 +549,8 @@ const rootApp = createApp({
     onMounted(async () => {
       const json = await fetch('./setting.json').then(res=>res.json());
 
-      setting.value = json.setting;
-      initSetting = json.setting;
+      setting.value = structuredClone(json.setting);
+      initSetting = structuredClone(json.setting);
 
       document.getElementById('name').placeholder = json.placeholder.name.join('\n');
       document.getElementById('stats').placeholder = json.placeholder.stats.join('\n');
