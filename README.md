@@ -17,15 +17,20 @@ CoC6版 / 7版のココフォリア用のキャラコマを作れるサイトで
 
 ## CREDIT
 
-### クトゥルフ神話TRPG
+<details>
+<summary>クトゥルフ神話TRPG</summary>
+
 ```
 本作は、「株式会社アークライト」及び「株式会社KADOKAWA」が権利を有する『クトゥルフ神話TRPG』シリーズの二次創作物です。
 Call of Cthulhu is copyright ©1981, 2015, 2019 by Chaosium Inc. ;all rights reserved. Arranged by Arclight Inc.
 Call of Cthulhu is a registered trademark of Chaosium Inc.
 PUBLISHED BY KADOKAWA CORPORATION　「クトゥルフ神話TRPG」「新クトゥルフ神話TRPG」
 ```
+</details>
 
-### vue.js
+<details>
+<summary>vue.js</summary>
+
 ```
 The MIT License (MIT)
 
@@ -49,9 +54,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
+</details>
 
 
-### Material Symbols
+<details>
+<summary>Material Symbols</summary>
+
 ```
                               Apache License
                         Version 2.0, January 2004
@@ -255,3 +263,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+</details>
